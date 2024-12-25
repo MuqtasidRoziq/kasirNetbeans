@@ -30,7 +30,7 @@ public class formListProduk extends javax.swing.JPanel {
         try {
             Connection con = koneksi.getConnection();
             Statement st = con.createStatement();
-            String query = "SELECT id_produk, nama_produk, harga_jual, stok, satuan FROM tb_produk"; 
+            String query = "SELECT id_produk, nama_produk, harga_jual, stok, satuan FROM produk"; 
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
@@ -69,7 +69,7 @@ public class formListProduk extends javax.swing.JPanel {
 
             // Query untuk mencari data user berdasarkan ID, Nama, atau Email yang cocok dengan kata kunci
             String query = "SELECT id_produk, nama_produk, harga_beli, harga_jual, stok, satuan " +
-                            "FROM tb_produk WHERE id_produk LIKE '%" + keyword + "%' " +
+                            "FROM produk WHERE id_produk LIKE '%" + keyword + "%' " +
                             "OR nama_produk LIKE '%" + keyword + "%' ";
 
             ResultSet rs = st.executeQuery(query);

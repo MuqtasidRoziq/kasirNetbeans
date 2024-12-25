@@ -38,7 +38,7 @@ public class formDataUser extends javax.swing.JPanel {
 // Load Data User //
     private void loadDataUser() {
         DefaultTableModel model = (DefaultTableModel) tabUSer.getModel();
-        model.setRowCount(0); // Reset tabel
+        model.setRowCount(0);
 
         try {
             Connection con = koneksi.getConnection();

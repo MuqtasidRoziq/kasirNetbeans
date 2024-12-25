@@ -329,7 +329,7 @@ public class formTambahProduk extends javax.swing.JFrame {
     }//GEN-LAST:event_inputHargaJualActionPerformed
 
     private void selectSatuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectSatuanActionPerformed
-        addProduk();
+        
     }//GEN-LAST:event_selectSatuanActionPerformed
 
     private void inputStokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputStokActionPerformed

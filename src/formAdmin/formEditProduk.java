@@ -211,6 +211,11 @@ public class formEditProduk extends javax.swing.JFrame {
         lblSatuan.setText("Satuan");
 
         selectSatuan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Satuan -", "pcs", "kg" }));
+        selectSatuan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectSatuanActionPerformed(evt);
+            }
+        });
 
         btnSave.setBackground(new java.awt.Color(51, 51, 255));
         btnSave.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
@@ -343,6 +348,10 @@ public class formEditProduk extends javax.swing.JFrame {
     private void inputStokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputStokActionPerformed
         
     }//GEN-LAST:event_inputStokActionPerformed
+
+    private void selectSatuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectSatuanActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_selectSatuanActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

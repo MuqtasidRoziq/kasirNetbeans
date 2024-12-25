@@ -290,11 +290,11 @@ public class formTambahUser extends javax.swing.JFrame {
     }//GEN-LAST:event_inputUsernameActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-            addUser();
+        addUser();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void inputPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPasswordActionPerformed
-        // editUser();
+        addUser();
     }//GEN-LAST:event_inputPasswordActionPerformed
 
 
