@@ -42,7 +42,6 @@ public class formMenuUtama extends javax.swing.JFrame {
         header = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         menuList = new javax.swing.JPanel();
         listMenuItemKasir = new javax.swing.JPanel();
         content = new javax.swing.JPanel();
@@ -63,9 +62,6 @@ public class formMenuUtama extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/logoKasir.png"))); // NOI18N
         jLabel1.setText("Toko Kami");
 
-        jLabel2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
-        jLabel2.setText("Nama User");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -73,17 +69,13 @@ public class formMenuUtama extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 445, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(15, 15, 15))
+                .addContainerGap(527, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
+                .addComponent(jLabel1)
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
@@ -146,7 +138,7 @@ public class formMenuUtama extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        isiContent.add(new formHalamanKasir());
+        isiContent.add(new formHalamanKasir(userId));
         isiContent.repaint();
         isiContent.revalidate();
     }//GEN-LAST:event_formWindowOpened
@@ -188,7 +180,6 @@ public class formMenuUtama extends javax.swing.JFrame {
     private javax.swing.JPanel header;
     private javax.swing.JPanel isiContent;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel listMenuItemKasir;
     private javax.swing.JPanel menuList;
@@ -207,7 +198,7 @@ public class formMenuUtama extends javax.swing.JFrame {
         // list menu //
         formMenuList menuKasir = new formMenuList(iconkasir, false, null, "kasir", (ActionEvent e) -> {
             isiContent.removeAll();
-            isiContent.add(new formHalamanKasir());
+            isiContent.add(new formHalamanKasir(userId));
             isiContent.repaint();
             isiContent.revalidate();
         });
