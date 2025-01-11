@@ -103,13 +103,10 @@ public class formHalamanKasir extends javax.swing.JPanel {
 // Add Product To Cart //
     private void addProduct() {
         DefaultTableModel tbl = (DefaultTableModel) tabProduk.getModel();
-        int counter = 0;
         SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat formatDateTransaksi = new SimpleDateFormat("ddMM");
+        SimpleDateFormat formatDateTransaksi = new SimpleDateFormat("yyMMyyyss");
         String dateTransaksi = formatDateTransaksi.format(new Date());
-        String date = formatDate.format(new Date());
-        counter++;
-        String formattedCounter = String.format("%03d", counter);        
+        String date = formatDate.format(new Date());      
         
         if (inputJumlah.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Input jumlah tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
@@ -132,13 +129,12 @@ public class formHalamanKasir extends javax.swing.JPanel {
                 total += subTotal;
                 inputSubTotal.setText(String.format("%.2f", subTotal));
                 inputTotal.setText(String.format("%.2f", total));
-                inputIdTransaksi.setText("TX" + dateTransaksi + formattedCounter);
+                inputIdTransaksi.setText("TRX" + dateTransaksi);
                 inputTanggal.setText(date);
                 inputIdProduk.setText("");
                 inputNamaProduk.setText("");
                 inputHarga.setText("");
                 inputJumlah.setText("");
-                inputSubTotal.setText("");
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Input harga atau jumlah tidak valid!", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -229,16 +225,16 @@ public class formHalamanKasir extends javax.swing.JPanel {
             conn.setAutoCommit(false); // Mulai transaksi
 
             // Simpan ke tabel transaksi
-            String sqlTransaksi = "INSERT INTO transaksi (id_transaksi, tanggal_transaksi, total_harga, id_user) VALUES (?, ?, ?, ?)";
+            String sqlTransaksi = "INSERT INTO transaksi (id_transaksi , id_user, tanggal_transaksi, total_harga) VALUES (?, ?, ?, ?)";
             PreparedStatement psTransaksi = conn.prepareStatement(sqlTransaksi);
             psTransaksi.setString(1, inputIdTransaksi.getText());
-            psTransaksi.setString(2, inputTanggal.getText());
-            psTransaksi.setDouble(3, Double.parseDouble(inputTotal.getText()));
-            psTransaksi.setString(4, idKasir.getText());
+            psTransaksi.setString(2, idKasir.getText());
+            psTransaksi.setString(3, inputTanggal.getText());
+            psTransaksi.setDouble(4, Double.parseDouble(inputTotal.getText()));
             psTransaksi.executeUpdate();
 
             // Simpan ke tabel detail_transaksi dan kurangi stok barang
-            String sqlDetailTransaksi = "INSERT INTO detail_transaksi (id_detail, id_produk, jumlah, harga_barang) VALUES (?, ?, ?, ?)";
+            String sqlDetailTransaksi = "INSERT INTO detail_transaksi (id_transaksi, id_produk, jumlah, harga_produk, subtotal) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement psDetail = conn.prepareStatement(sqlDetailTransaksi);
 
             String sqlUpdateStok = "UPDATE produk SET stok = stok - ? WHERE id_produk = ?";
@@ -254,6 +250,7 @@ public class formHalamanKasir extends javax.swing.JPanel {
                 psDetail.setString(2, idProduk);
                 psDetail.setInt(3, jumlah);
                 psDetail.setDouble(4, hargaBarang);
+                psDetail.setDouble(5, Double.parseDouble(inputSubTotal.getText()));
                 psDetail.addBatch();
 
                 // Kurangi stok barang
@@ -511,7 +508,7 @@ public class formHalamanKasir extends javax.swing.JPanel {
         bg2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lbTotal.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
-        lbTotal.setText("Total");
+        lbTotal.setText("Total Harga");
 
         inputTotal.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
         inputTotal.addActionListener(new java.awt.event.ActionListener() {
@@ -653,7 +650,6 @@ public class formHalamanKasir extends javax.swing.JPanel {
                             .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(inputIdTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(inputTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lbBayar)
                             .addComponent(lbKembalian))
@@ -661,14 +657,14 @@ public class formHalamanKasir extends javax.swing.JPanel {
                     .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(inputBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(inputKembalian, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(12, 12, 12)
                 .addComponent(lbTotal)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(inputTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
