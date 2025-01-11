@@ -98,16 +98,47 @@ public class formHalamanKasir extends javax.swing.JPanel {
             
         }
     }
-//  Function Search Product Tab End//    
+//  Function Search Product Tab End// 
     
-// Add Product To Cart //
+//  Function noTransaksi Otomatis //    
+    private String noTransaksi() {
+        String urutan = null;
+
+        SimpleDateFormat formatDateTransaksi = new SimpleDateFormat("yyMMdd");
+        String dateTransaksi = formatDateTransaksi.format(new Date());
+
+        String sql = "SELECT RIGHT(id_transaksi, 3) AS nomor " +
+                     "FROM transaksi " +
+                     "WHERE id_transaksi LIKE 'TRX" + dateTransaksi + "%' " +
+                     "ORDER BY id_transaksi DESC " +
+                     "LIMIT 1";
+        try {
+            Connection conn = koneksi.getConnection();
+            PreparedStatement pst = conn.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                int nomor = Integer.parseInt(rs.getString("nomor"));
+                nomor++;
+                urutan = "TRX" + dateTransaksi + String.format("%03d", nomor);
+            } else {
+                urutan = "TRX" + dateTransaksi + "001";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            urutan = "TRX" + dateTransaksi + "001"; // Default jika terjadi error
+        }
+
+        return urutan;
+    }
+//  Function noTransaksi Otomatis End // 
+    
+//  Function addProduct //    
     private void addProduct() {
         DefaultTableModel tbl = (DefaultTableModel) tabProduk.getModel();
         SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat formatDateTransaksi = new SimpleDateFormat("yyMMyyyss");
-        String dateTransaksi = formatDateTransaksi.format(new Date());
         String date = formatDate.format(new Date());      
-        
+
         if (inputJumlah.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Input jumlah tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
             inputJumlah.requestFocus();
@@ -129,18 +160,19 @@ public class formHalamanKasir extends javax.swing.JPanel {
                 total += subTotal;
                 inputSubTotal.setText(String.format("%.2f", subTotal));
                 inputTotal.setText(String.format("%.2f", total));
-                inputIdTransaksi.setText("TRX" + dateTransaksi);
+                inputIdTransaksi.setText(noTransaksi());
                 inputTanggal.setText(date);
                 inputIdProduk.setText("");
                 inputNamaProduk.setText("");
                 inputHarga.setText("");
                 inputJumlah.setText("");
+                inputSubTotal.setText("");
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Input harga atau jumlah tidak valid!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-//  Add Product To Cart End
+//  Function addProduct End // 
 
 //  Delete Row in TabProduk //
     private void deleteRow() {
@@ -244,13 +276,14 @@ public class formHalamanKasir extends javax.swing.JPanel {
                 String idProduk = tbl.getValueAt(i, 0).toString();
                 int jumlah = Integer.parseInt(tbl.getValueAt(i, 3).toString());
                 double hargaBarang = Double.parseDouble(tbl.getValueAt(i, 2).toString());
+                double subTotal = Double.parseDouble(tbl.getValueAt(i, 4).toString());
 
                 // Simpan detail transaksi
                 psDetail.setString(1, inputIdTransaksi.getText());
                 psDetail.setString(2, idProduk);
                 psDetail.setInt(3, jumlah);
                 psDetail.setDouble(4, hargaBarang);
-                psDetail.setDouble(5, Double.parseDouble(inputSubTotal.getText()));
+                psDetail.setDouble(5, subTotal);
                 psDetail.addBatch();
 
                 // Kurangi stok barang
