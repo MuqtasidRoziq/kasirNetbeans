@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import konektor.koneksi;
 
-
 public class formHalamanKasir extends javax.swing.JPanel {
     
     public formHalamanKasir(String userId) {
@@ -325,7 +324,13 @@ public class formHalamanKasir extends javax.swing.JPanel {
             }
         }
     }
-// add transaksi to databases end //    
+// add transaksi to databases end // 
+    
+// Nota //
+
+
+
+// Nota End //    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
