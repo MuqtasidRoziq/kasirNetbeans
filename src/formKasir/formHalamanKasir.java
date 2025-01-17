@@ -1,16 +1,21 @@
 package formKasir;
+import konektor.koneksi;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import javax.swing.JOptionPane;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import konektor.koneksi;
+import javax.swing.JTextArea;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfWriter;
 
 public class formHalamanKasir extends javax.swing.JPanel {
     
@@ -28,7 +33,6 @@ public class formHalamanKasir extends javax.swing.JPanel {
         inputTotal.setEditable(false);
         inputIdProduk.requestFocus();
         btnHapus.setEnabled(false);
-        
         tabProduk.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent event) {
@@ -297,8 +301,8 @@ public class formHalamanKasir extends javax.swing.JPanel {
             conn.commit(); // Commit transaksi
 
             JOptionPane.showMessageDialog(this, "Transaksi berhasil disimpan!", "Informasi", JOptionPane.INFORMATION_MESSAGE);
-
-            // Reset semua input setelah transaksi berhasil
+            cetakNotaPDF();
+            // Reset semua input setelah  transaksi berhasil
             tbl.setRowCount(0);
             inputIdTransaksi.setText("");
             inputTanggal.setText("");
@@ -327,9 +331,56 @@ public class formHalamanKasir extends javax.swing.JPanel {
 // add transaksi to databases end // 
     
 // Nota //
+    private void cetakNotaPDF() {
+        DefaultTableModel tbl = (DefaultTableModel) tabProduk.getModel();
+        if (tbl.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Tidak ada transaksi untuk dicetak!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
+        Document document = new Document();
+        try {
+            // Nama file PDF
+            String filePath = inputIdTransaksi.getText() + ".pdf";
 
+            // Membuka writer untuk menulis ke file PDF
+            PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+            Font monospace = new Font(Font.FontFamily.COURIER, 12);
+            // Header Nota
+            document.add(new Paragraph("                KA MART                 ", monospace));
+            document.add(new Paragraph("         JL. MULYONO NO.01 SOLO         ", monospace));
+            document.add(new Paragraph("            telp(0123) 456789           ", monospace));
+            document.add(new Paragraph("========================================", monospace));
+            document.add(new Paragraph("ID Transaksi: " + inputIdTransaksi.getText(), monospace));
+            document.add(new Paragraph("Tanggal     : " + inputTanggal.getText(), monospace));
+            document.add(new Paragraph("Kasir       : " + namaKasir.getText(), monospace));
+            document.add(new Paragraph("--------------- PEMBELIAN --------------", monospace));
+            for (int i = 0; i < tbl.getRowCount(); i++) {
+                String jumlah = tbl.getValueAt(i, 3).toString();
+                String namaProduk = tbl.getValueAt(i, 1).toString(); // Nama Produk
+                String subTotal = tbl.getValueAt(i, 4).toString();  // Subtotal
 
+                String Produk = String.format("%-4s %-20s %10s", jumlah, namaProduk,"Rp. " + subTotal);
+                document.add(new Paragraph(Produk, monospace));
+            }
+            document.add(new Paragraph("----------------------------------------", monospace));
+
+            // Total, Bayar, dan Kembalian
+            document.add(new Paragraph("Total        : Rp. " + inputTotal.getText(), monospace));
+            document.add(new Paragraph("Bayar        : Rp. " + inputBayar.getText(), monospace));
+            document.add(new Paragraph("Kembalian    : Rp. " + inputKembalian.getText(), monospace));
+            document.add(new Paragraph("========================================", monospace));
+            document.add(new Paragraph("   Terima Kasih Telah Berbelanja!", monospace));
+            document.add(new Paragraph("             Sampai Jumpa ", monospace));
+
+            document.close();
+            JOptionPane.showMessageDialog(this, "Nota berhasil disimpan ke PDF:\n" + filePath, "Informasi", JOptionPane.INFORMATION_MESSAGE);
+        } catch (DocumentException | IOException e) {
+            JOptionPane.showMessageDialog(this, "Gagal mencetak nota ke PDF!\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
 // Nota End //    
     
     @SuppressWarnings("unchecked")
@@ -364,7 +415,6 @@ public class formHalamanKasir extends javax.swing.JPanel {
         lbKembalian = new javax.swing.JLabel();
         inputKembalian = new javax.swing.JTextField();
         btnBayar = new javax.swing.JButton();
-        btnPrint = new javax.swing.JButton();
         inputTanggal = new javax.swing.JTextField();
         lbIdTransaksi1 = new javax.swing.JLabel();
         idKasir = new javax.swing.JTextField();
@@ -595,11 +645,6 @@ public class formHalamanKasir extends javax.swing.JPanel {
             }
         });
 
-        btnPrint.setBackground(new java.awt.Color(51, 51, 255));
-        btnPrint.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
-        btnPrint.setForeground(new java.awt.Color(255, 255, 255));
-        btnPrint.setText("Print");
-
         lbIdTransaksi1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
         lbIdTransaksi1.setText("Id Kasir");
 
@@ -627,21 +672,6 @@ public class formHalamanKasir extends javax.swing.JPanel {
                 .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(bg2Layout.createSequentialGroup()
                         .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(inputTotal)
-                            .addGroup(bg2Layout.createSequentialGroup()
-                                .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbTotal)
-                                    .addGroup(bg2Layout.createSequentialGroup()
-                                        .addComponent(idKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lbTanggal)
-                                            .addComponent(namaKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel1))))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(bg2Layout.createSequentialGroup()
-                        .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(bg2Layout.createSequentialGroup()
                                 .addComponent(inputBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -658,12 +688,24 @@ public class formHalamanKasir extends javax.swing.JPanel {
                                         .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(lbKembalian)
                                             .addComponent(inputTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(bg2Layout.createSequentialGroup()
-                                        .addComponent(btnBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(btnBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(6, 6, 6))))
+                        .addGap(6, 6, 6))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bg2Layout.createSequentialGroup()
+                        .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(inputTotal, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, bg2Layout.createSequentialGroup()
+                                .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbTotal)
+                                    .addGroup(bg2Layout.createSequentialGroup()
+                                        .addComponent(idKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lbTanggal)
+                                            .addComponent(namaKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel1))))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         bg2Layout.setVerticalGroup(
             bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -700,9 +742,7 @@ public class formHalamanKasir extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(inputTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(bg2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -799,7 +839,6 @@ public class formHalamanKasir extends javax.swing.JPanel {
     private javax.swing.JPanel bg2;
     private javax.swing.JButton btnBayar;
     private javax.swing.JButton btnHapus;
-    private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnTambah;
     private javax.swing.JTextField idKasir;

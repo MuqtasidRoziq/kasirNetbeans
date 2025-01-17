@@ -1,6 +1,5 @@
 package formKasir;
 
-import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,16 +11,13 @@ import konektor.koneksi;
 
 public class formRiwayatTransaksi extends javax.swing.JPanel {
 
-    /**
-     * Creates new form formRiwayatTransaksi
-     */
-    public formRiwayatTransaksi() {
+    public formRiwayatTransaksi(String userId) {
         initComponents();
-        historyTransaction();
+        historyTransaction(userId);
     }
 
 // Riwayat Transaksi //
-    private void historyTransaction(){
+    private void historyTransaction(String userId){
         DefaultTableModel tbl = (DefaultTableModel) tabRiwayat.getModel(); // Mengambil model tabel
         tbl.setRowCount(0);
         try {
@@ -32,8 +28,10 @@ public class formRiwayatTransaksi extends javax.swing.JPanel {
                        + "JOIN detail_transaksi dt ON t.id_transaksi = dt.id_transaksi "
                        + "JOIN user u ON t.id_user = u.id_user "
                        + "JOIN produk p ON dt.id_produk = p.id_produk "
+                       + "WHERE t.id_user = ?"
                        + "ORDER BY t.tanggal_transaksi DESC";
             PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, userId);
             ResultSet rs = pst.executeQuery();
             
             // Format ubah posisi tanggal

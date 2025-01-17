@@ -1,4 +1,5 @@
-package formKasir;
+package formOwner;
+import formKasir.*;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import formAdmin.formMenuList;
@@ -9,7 +10,7 @@ import javax.swing.JFrame;
  *
  * @author muqta
  */
-public class formMenuUtama extends javax.swing.JFrame {
+public class formMenuUtamaOwner extends javax.swing.JFrame {
 
     private String userId;
     private String nama;
@@ -18,7 +19,7 @@ public class formMenuUtama extends javax.swing.JFrame {
     private String userName;
     private String Password;
     
-    public formMenuUtama() {
+    public formMenuUtamaOwner() {
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);   
         execute();
@@ -157,20 +158,23 @@ public class formMenuUtama extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(formMenuUtama.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formMenuUtamaOwner.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(formMenuUtama.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formMenuUtamaOwner.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(formMenuUtama.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formMenuUtamaOwner.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(formMenuUtama.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formMenuUtamaOwner.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new formMenuUtama().setVisible(true);
+                new formMenuUtamaOwner().setVisible(true);
             }
         });
     }
@@ -210,7 +214,7 @@ public class formMenuUtama extends javax.swing.JFrame {
         });
         formMenuList menuRiwayatTransaksi = new formMenuList(iconRiwayatTransaksi, false, null, "Riwayat", (ActionEvent e) -> {
             isiContent.removeAll();
-            isiContent.add(new formRiwayatTransaksi(userId));
+            isiContent.add(new formRiwayatTransaksi());
             isiContent.repaint();
             isiContent.revalidate();
         });
