@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import konektor.koneksi;
 import formAdmin.formUtama;
 import formKasir.formMenuUtama;
+import formOwner.formMenuUtamaOwner;
 import java.awt.Frame;
 
 public class Login extends javax.swing.JFrame {
@@ -204,6 +205,12 @@ public class Login extends javax.swing.JFrame {
                     formMenuUtama mainMenu = new formMenuUtama();
                     mainMenu.setVisible(true);
                     mainMenu.setUser(userId, nama, email, role, userName, Password);
+                    mainMenu.setExtendedState(Frame.MAXIMIZED_BOTH);
+                    this.dispose();
+                }else if (role.equalsIgnoreCase("owner")){
+                    JOptionPane.showMessageDialog(this, "berhasil login sebagai owner");
+                    formMenuUtamaOwner mainMenu = new formMenuUtamaOwner();
+                    mainMenu.setVisible(true);
                     mainMenu.setExtendedState(Frame.MAXIMIZED_BOTH);
                     this.dispose();
                 }else {

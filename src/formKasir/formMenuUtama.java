@@ -189,9 +189,7 @@ public class formMenuUtama extends javax.swing.JFrame {
         
         // gambar icon //
         ImageIcon iconkasir = new ImageIcon(getClass().getResource("/image/kasir.png"));
-        ImageIcon iconListProduk = new ImageIcon(getClass().getResource("/image/data barang.png"));
         ImageIcon iconRiwayatTransaksi = new ImageIcon(getClass().getResource("/image/riwayat.png"));
-        ImageIcon iconLaporan = new ImageIcon(getClass().getResource("/image/laporan.png"));
         ImageIcon iconProfile = new ImageIcon(getClass().getResource("/image/profile.png"));
         ImageIcon iconLogout = new ImageIcon(getClass().getResource("/image/logout.png"));
         
@@ -202,21 +200,9 @@ public class formMenuUtama extends javax.swing.JFrame {
             isiContent.repaint();
             isiContent.revalidate();
         });
-        formMenuList menuProduk = new formMenuList(iconListProduk, false, null, "List Produk", (ActionEvent e) -> {
-            isiContent.removeAll();
-            isiContent.add(new formListProduk());
-            isiContent.repaint();
-            isiContent.revalidate();
-        });
         formMenuList menuRiwayatTransaksi = new formMenuList(iconRiwayatTransaksi, false, null, "Riwayat", (ActionEvent e) -> {
             isiContent.removeAll();
             isiContent.add(new formRiwayatTransaksi(userId));
-            isiContent.repaint();
-            isiContent.revalidate();
-        });
-        formMenuList menuLaporan = new formMenuList(iconLaporan, false, null, "Laporan", (ActionEvent e) -> {
-            isiContent.removeAll();
-            isiContent.add(new formLaporan());
             isiContent.repaint();
             isiContent.revalidate();
         });
@@ -235,9 +221,7 @@ public class formMenuUtama extends javax.swing.JFrame {
         
         // panggil addMenu //
         listMenuItemKasir.add(menuKasir);
-        listMenuItemKasir.add(menuProduk);
         listMenuItemKasir.add(menuRiwayatTransaksi);
-        listMenuItemKasir.add(menuLaporan);
         listMenuItemKasir.add(menuProfile);
         listMenuItemKasir.add(Logout);
           

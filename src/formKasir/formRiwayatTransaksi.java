@@ -11,8 +11,11 @@ import konektor.koneksi;
 
 public class formRiwayatTransaksi extends javax.swing.JPanel {
 
+    private String userId;
+
     public formRiwayatTransaksi(String userId) {
         initComponents();
+        this.userId = userId;
         historyTransaction(userId);
     }
 
@@ -42,7 +45,6 @@ public class formRiwayatTransaksi extends javax.swing.JPanel {
             while (rs.next()) {
                 String idTransaksi = rs.getString("id_transaksi");
                 String tanggalTransaksi = rs.getString("tanggal_transaksi");
-                String namaUser = rs.getString("nama_user");
                 String namaProduk = rs.getString("nama_produk");
                 double hargaProduk = rs.getDouble("harga_produk");
                 int jumlah = rs.getInt("jumlah");
@@ -55,7 +57,7 @@ public class formRiwayatTransaksi extends javax.swing.JPanel {
                     tanggalTransaksi = "Invalid Date";
                 }
 
-                Object[] row = { idTransaksi, tanggalTransaksi, namaUser, namaProduk, 
+                Object[] row = { idTransaksi, tanggalTransaksi, namaProduk, 
                                  hargaProduk, jumlah, subtotal };
                 tbl.addRow(row);
             }
@@ -71,7 +73,7 @@ public class formRiwayatTransaksi extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tabRiwayat.getModel();
 
         if (keyword.isEmpty()) {
-            historyTransaction();
+            historyTransaction(userId);
             JOptionPane.showMessageDialog(this, "Kolom pencarian harus diisi!", "Peringatan", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -84,7 +86,7 @@ public class formRiwayatTransaksi extends javax.swing.JPanel {
                       + "JOIN detail_transaksi dt ON t.id_transaksi = dt.id_transaksi "
                       + "JOIN user u ON t.id_user = u.id_user "
                       + "JOIN produk p ON dt.id_produk = p.id_produk "
-                      + "WHERE t.id_transaksi LIKE ? OR u.nama_user LIKE ? OR p.nama_produk LIKE ? "
+                      + "WHERE t.id_user LIKE ? OR t.id_transaksi LIKE ? OR u.nama_user LIKE ? OR p.nama_produk LIKE ? "
                       + "ORDER BY t.tanggal_transaksi DESC";
     
         try (Connection conn = koneksi.getConnection();
@@ -116,7 +118,7 @@ public class formRiwayatTransaksi extends javax.swing.JPanel {
                             // Pesan jika tidak ada data ditemukan
                 if (model.getRowCount() == 0) {
                     JOptionPane.showMessageDialog(this, "Data Transaksi tidak ditemukan.", "Pencarian", JOptionPane.INFORMATION_MESSAGE);
-                    historyTransaction(); // Tampilkan kembali data asli jika tidak ada hasil
+                    historyTransaction(userId);
                 }    
             }
         } catch (SQLException e) {
@@ -147,17 +149,17 @@ public class formRiwayatTransaksi extends javax.swing.JPanel {
 
         tabRiwayat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Id Transaksi", "Tanggal Transaksi", "Nama Kasir", "Nama Produk", "Harga", "Jumlah", "SubTotal"
+                "Id Transaksi", "Tanggal Transaksi", "Nama Produk", "Harga", "Jumlah", "SubTotal"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -172,7 +174,6 @@ public class formRiwayatTransaksi extends javax.swing.JPanel {
             tabRiwayat.getColumnModel().getColumn(3).setResizable(false);
             tabRiwayat.getColumnModel().getColumn(4).setResizable(false);
             tabRiwayat.getColumnModel().getColumn(5).setResizable(false);
-            tabRiwayat.getColumnModel().getColumn(6).setResizable(false);
         }
 
         inputSeacrh.addActionListener(new java.awt.event.ActionListener() {

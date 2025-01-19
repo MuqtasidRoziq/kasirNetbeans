@@ -140,7 +140,12 @@ public class formEditUser extends javax.swing.JFrame {
         lbRole.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
         lbRole.setText("Role");
 
-        selectRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Role - ", "admin", "kasir" }));
+        selectRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Role - ", "owner", "admin", "kasir" }));
+        selectRole.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectRoleActionPerformed(evt);
+            }
+        });
 
         lbEmail.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
         lbEmail.setText("Email");
@@ -317,6 +322,10 @@ public class formEditUser extends javax.swing.JFrame {
         editDataUser();
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void selectRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectRoleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_selectRoleActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

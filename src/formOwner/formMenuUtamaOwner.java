@@ -1,5 +1,4 @@
 package formOwner;
-import formKasir.*;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import formAdmin.formMenuList;
@@ -139,7 +138,7 @@ public class formMenuUtamaOwner extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        isiContent.add(new formHalamanKasir(userId));
+        isiContent.add(new formPenjualan());
         isiContent.repaint();
         isiContent.revalidate();
     }//GEN-LAST:event_formWindowOpened
@@ -193,22 +192,14 @@ public class formMenuUtamaOwner extends javax.swing.JFrame {
         
         // gambar icon //
         ImageIcon iconkasir = new ImageIcon(getClass().getResource("/image/kasir.png"));
-        ImageIcon iconListProduk = new ImageIcon(getClass().getResource("/image/data barang.png"));
         ImageIcon iconRiwayatTransaksi = new ImageIcon(getClass().getResource("/image/riwayat.png"));
         ImageIcon iconLaporan = new ImageIcon(getClass().getResource("/image/laporan.png"));
-        ImageIcon iconProfile = new ImageIcon(getClass().getResource("/image/profile.png"));
         ImageIcon iconLogout = new ImageIcon(getClass().getResource("/image/logout.png"));
         
         // list menu //
-        formMenuList menuKasir = new formMenuList(iconkasir, false, null, "kasir", (ActionEvent e) -> {
+        formMenuList Dashboard = new formMenuList(iconkasir, false, null, "Dashboard", (ActionEvent e) -> {
             isiContent.removeAll();
-            isiContent.add(new formHalamanKasir(userId));
-            isiContent.repaint();
-            isiContent.revalidate();
-        });
-        formMenuList menuProduk = new formMenuList(iconListProduk, false, null, "List Produk", (ActionEvent e) -> {
-            isiContent.removeAll();
-            isiContent.add(new formListProduk());
+            isiContent.add(new formPenjualan());
             isiContent.repaint();
             isiContent.revalidate();
         });
@@ -218,15 +209,9 @@ public class formMenuUtamaOwner extends javax.swing.JFrame {
             isiContent.repaint();
             isiContent.revalidate();
         });
-        formMenuList menuLaporan = new formMenuList(iconLaporan, false, null, "Laporan", (ActionEvent e) -> {
+        formMenuList menuPendapatan = new formMenuList(iconLaporan, false, null, "Pendapatan", (ActionEvent e) -> {
             isiContent.removeAll();
             isiContent.add(new formLaporan());
-            isiContent.repaint();
-            isiContent.revalidate();
-        });
-        formMenuList menuProfile = new formMenuList(iconProfile, false, null, "Profile", (ActionEvent e) -> {
-            isiContent.removeAll();
-            isiContent.add(new formProfileKasir(userId));
             isiContent.repaint();
             isiContent.revalidate();
         });
@@ -238,11 +223,9 @@ public class formMenuUtamaOwner extends javax.swing.JFrame {
         });
         
         // panggil addMenu //
-        listMenuItemKasir.add(menuKasir);
-        listMenuItemKasir.add(menuProduk);
+        listMenuItemKasir.add(Dashboard);
         listMenuItemKasir.add(menuRiwayatTransaksi);
-        listMenuItemKasir.add(menuLaporan);
-        listMenuItemKasir.add(menuProfile);
+        listMenuItemKasir.add(menuPendapatan);
         listMenuItemKasir.add(Logout);
           
         listMenuItemKasir.revalidate();

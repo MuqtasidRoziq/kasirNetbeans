@@ -126,7 +126,7 @@ public class formTambahUser extends javax.swing.JFrame {
         lbRole.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
         lbRole.setText("Role");
 
-        selectRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Role - ", "Admin", "Kasir" }));
+        selectRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Role - ", "owner", "Admin", "Kasir" }));
 
         lbEmail.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
         lbEmail.setText("Email");

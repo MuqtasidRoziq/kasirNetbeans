@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package formKasir;
+package formOwner;
 
 import konektor.koneksi;
 import java.sql.Connection;
@@ -32,7 +32,7 @@ public class formLaporan extends javax.swing.JPanel {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String tanggalHariIni = sdf.format(new Date());
 
-        // Tampilkan laporan keuangan untuk hari ini
+        // Tampilkan laporan keuangan untuk hari ini.
         laporanKeuangan(tanggalHariIni, tanggalHariIni);
 
         // Cek apakah ada transaksi hari ini
@@ -40,8 +40,9 @@ public class formLaporan extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Belum ada pemasukan hari ini!");
         }
 
-        // Tampilkan total pendapatan keseluruhan
-        double totalPendapatanKeseluruhan = getTotalPendapatanKeseluruhan();
+        double totalPendapatanHariIni = TotalPendapatanHariIni();
+        txtTotalPendapatanHariIni.setText(String.format("%.2f", totalPendapatanHariIni));
+        double totalPendapatanKeseluruhan = TotalPendapatanKeseluruhan();
         txtPendapatanKeseluruhan.setText(String.format("%.2f", totalPendapatanKeseluruhan));
     }
     
@@ -65,8 +66,25 @@ public class formLaporan extends javax.swing.JPanel {
         }
         return adaTransaksi;
     }
+    
+    private double TotalPendapatanHariIni(){
+        double totalPendapatanHariIni = 0;
+        try{
+            Connection conn = koneksi.getConnection();
+            String sql = "SELECT SUM(total_harga) AS totalHariIni FROM transaksi WHERE DATE(tanggal_transaksi) = CURDATE()";
+             PreparedStatement pst = conn.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery();
+             
+             if(rs.next()){
+                 totalPendapatanHariIni = rs.getDouble("totalHariIni");
+             }
+        } catch(SQLException e){
+            JOptionPane.showMessageDialog(this, "Eror" + e.getMessage());
+        }
+        return totalPendapatanHariIni;
+    }
 
-    private double getTotalPendapatanKeseluruhan() {
+    private double TotalPendapatanKeseluruhan() {
         double totalPendapatan = 0;
         try {
             // Koneksi ke database
@@ -115,8 +133,7 @@ public class formLaporan extends javax.swing.JPanel {
             // Reset tabel
             DefaultTableModel tbl = (DefaultTableModel) tabLaporan.getModel(); // Ambil model tabel dari UI
             tbl.setRowCount(0);
-
-            // Variabel untuk menghitung total keseluruhan
+            
             double totalPendapatan = 0;
             double totalKeuntungan = 0;
 
@@ -132,7 +149,6 @@ public class formLaporan extends javax.swing.JPanel {
                 Object[] row = { tanggal, namaProduk, totalJumlah, penjualan, keuntungan };
                 tbl.addRow(row);
 
-                // Hitung total pendapatan dan keuntungan
                 totalPendapatan += penjualan;
                 totalKeuntungan += keuntungan;
             }
@@ -143,8 +159,6 @@ public class formLaporan extends javax.swing.JPanel {
             // Hitung pendapatan bersih
             double pendapatanBersih = totalKeuntungan;
 
-            // Set nilai ke field UI
-            txtTotalPendapatanHariIni.setText(String.format("%.2f", totalPendapatan));
             txtPendapatanKotor.setText(String.format("%.2f", pendapatanKotor));
             txtPendapatanBersih.setText(String.format("%.2f", pendapatanBersih));
 
