@@ -27,17 +27,17 @@ public class formProdukTerlaris extends javax.swing.JFrame {
         try {
             Connection con = koneksi.getConnection();
             Statement st = con.createStatement();
-            String query = "SELECT p.nama_produk, SUM(dt.jumlah ) AS total_terjual "
-                    + "FROM detail_transaksi dt "
-                    + "JOIN produk p ON dt.id_produk = p.id_produk "
-                    + "GROUP BY p.nama_produk"; 
+            String query = "SELECT p.nama_produk, SUM(d.jumlah) AS total " +
+                "FROM detail_transaksi d " +
+                "JOIN produk p ON d.id_produk = p.id_produk " +
+                "GROUP BY p.nama_produk " +
+                "ORDER BY total DESC"; 
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
                 String namaProduk = rs.getString("nama_produk");
-                String totalJual = rs.getString("total_terjual");
+                String totalJual = rs.getString("total");
                 
-                // Tambahkan data ke model tabel
                 model.addRow(new Object[]{namaProduk, totalJual});
             }
         } catch (SQLException e) {

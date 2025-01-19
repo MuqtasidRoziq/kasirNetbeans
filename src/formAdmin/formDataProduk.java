@@ -248,15 +248,22 @@ public class formDataProduk extends javax.swing.JPanel {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Id Produk", "Nama Produk", "Harga Jual", "Harga Beli", "Stok", "Satuan"
+                "Id Produk", "Nama Produk", "Harga Beli", "Harga Jual", "Stok", "Satuan"
             }
         ) {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jScrollPane1.setViewportView(tabProduk);
