@@ -489,7 +489,8 @@ public class formPenjualan extends javax.swing.JPanel {
     }//GEN-LAST:event_btnShowProdukTerjualActionPerformed
 
     private void btnShowKasirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowKasirActionPerformed
-        // TODO add your handling code here:
+        formKinerjaKasir kasir = new formKinerjaKasir();
+        kasir.setVisible(true);
     }//GEN-LAST:event_btnShowKasirActionPerformed
 
 

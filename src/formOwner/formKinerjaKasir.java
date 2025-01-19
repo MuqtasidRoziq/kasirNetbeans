@@ -1,4 +1,7 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package formOwner;
 
 import java.sql.Connection;
@@ -8,29 +11,35 @@ import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
 import konektor.koneksi;
 
-public class formStokProduk extends javax.swing.JFrame {
 
-    public formStokProduk() {
+public class formKinerjaKasir extends javax.swing.JFrame {
+
+    public formKinerjaKasir() {
         initComponents();
         loadDataProduk();
     }
     
-    private void loadDataProduk() {
-        DefaultTableModel model = (DefaultTableModel) tabProduk.getModel();
+        private void loadDataProduk() {
+        DefaultTableModel model = (DefaultTableModel) tabKasir.getModel();
         model.setRowCount(0); // Reset tabel
 
         try {
             Connection con = koneksi.getConnection();
             Statement st = con.createStatement();
-            String query = "SELECT nama_produk, stok FROM produk ORDER BY stok"; 
+            String query = "SELECT u.nama_user AS kasir, COUNT(t.id_transaksi) AS total_transaksi, SUM(t.total_harga) AS total "
+                    + "FROM transaksi t JOIN user u ON t.id_user = u.id_user "
+                    + "WHERE u.role = 'kasir' "
+                    + "GROUP BY t.id_user, u.nama_user "
+                    + "ORDER BY total_transaksi DESC;"; 
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
-                String namaProduk = rs.getString("nama_produk");
-                String stok = rs.getString("stok");
+                String namaKasir = rs.getString("kasir");
+                String totalTransaksi = rs.getString("total_transaksi");
+                String pendapatan = rs.getString("total");
                 
                 // Tambahkan data ke model tabel
-                model.addRow(new Object[]{namaProduk, stok});
+                model.addRow(new Object[]{namaKasir, totalTransaksi, pendapatan});
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,7 +55,7 @@ public class formStokProduk extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabProduk = new javax.swing.JTable();
+        tabKasir = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -58,7 +67,7 @@ public class formStokProduk extends javax.swing.JFrame {
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel6.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
-        jLabel6.setText("Stok Produk ");
+        jLabel6.setText("Kinerja Kasir");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -79,26 +88,26 @@ public class formStokProduk extends javax.swing.JFrame {
 
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
 
-        tabProduk.setModel(new javax.swing.table.DefaultTableModel(
+        tabKasir.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Nama Produk", "Stok"
+                "Nama Kasir", "Total Transaksi", "Pendapatan"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tabProduk);
+        jScrollPane1.setViewportView(tabKasir);
 
         jButton1.setBackground(new java.awt.Color(51, 51, 255));
         jButton1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
@@ -128,7 +137,7 @@ public class formStokProduk extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jButton1)
-                        .addGap(0, 293, Short.MAX_VALUE))
+                        .addGap(0, 295, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -164,7 +173,9 @@ public class formStokProduk extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -179,41 +190,31 @@ public class formStokProduk extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(formStokProduk.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formKinerjaKasir.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(formStokProduk.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formKinerjaKasir.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(formStokProduk.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formKinerjaKasir.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(formStokProduk.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(formKinerjaKasir.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new formStokProduk().setVisible(true);
+                new formKinerjaKasir().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tabProduk;
+    private javax.swing.JTable tabKasir;
     // End of variables declaration//GEN-END:variables
 }
