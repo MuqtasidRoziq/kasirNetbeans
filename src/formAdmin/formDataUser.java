@@ -8,11 +8,15 @@ import java.sql.Statement;
 import konektor.koneksi;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import loging.loging.ActivityLogger;
 
 public class formDataUser extends javax.swing.JPanel {
 
-    public formDataUser() {
+    private final String username;
+    
+    public formDataUser(String nama) {
         initComponents();
+        this.username =nama;
         loadDataUser();
         
 //      Menonaktifkan tombol Edit dan Delete saat pertama kali dibuka
@@ -43,19 +47,17 @@ public class formDataUser extends javax.swing.JPanel {
         try {
             Connection con = koneksi.getConnection();
             Statement st = con.createStatement();
-            String query = "SELECT id_user, nama_user, role, email_user, username_user, password_user FROM user"; 
+            String query = "SELECT id_user, username, password, role FROM user"; 
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
                 String idUser = rs.getString("id_user");
-                String nama = rs.getString("nama_user");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
                 String role = rs.getString("role");
-                String email = rs.getString("email_user");
-                String username = rs.getString("username_user");
-                String password = rs.getString("password_user");
                 
                 // Tambahkan data ke model tabel
-                model.addRow(new Object[]{idUser, nama, role, email, username, password});
+                model.addRow(new Object[]{idUser, username, password, role});
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,15 +69,14 @@ public class formDataUser extends javax.swing.JPanel {
     private void editDataUser(){
         int selectedRow = tabUSer.getSelectedRow();
         if (selectedRow != -1) {
+            String namaAdmin = this.username;
             String idUser = tabUSer.getValueAt(selectedRow, 0).toString();
-            String nama = tabUSer.getValueAt(selectedRow, 1).toString();
-            String role = tabUSer.getValueAt(selectedRow, 2).toString();
-            String email = tabUSer.getValueAt(selectedRow, 3).toString();
-            String username = tabUSer.getValueAt(selectedRow, 4).toString();
-            String password = tabUSer.getValueAt(selectedRow, 5).toString();
+            String usernameLama = tabUSer.getValueAt(selectedRow, 1).toString();
+            String password = tabUSer.getValueAt(selectedRow, 2).toString();
+            String role = tabUSer.getValueAt(selectedRow, 3).toString();
 
             // Buka form edit dengan data pengguna yang dipilih
-            formEditUser editUserForm = new formEditUser(idUser, nama, role, email, username, password);
+            formEditUser editUserForm = new formEditUser(namaAdmin, idUser, usernameLama, password, role);
             editUserForm.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent windowEvent) {
@@ -94,6 +95,7 @@ public class formDataUser extends javax.swing.JPanel {
         int selectedRow = tabUSer.getSelectedRow();
         if (selectedRow != -1) {
             String idUser = tabUSer.getValueAt(selectedRow, 0).toString();
+            String namaUser = tabUSer.getValueAt(selectedRow, 1).toString();
             // Konfirmasi dan hapus data dari database berdasarkan ID
             int confirm = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin menghapus user ini?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
@@ -102,10 +104,12 @@ public class formDataUser extends javax.swing.JPanel {
                     Statement st = con.createStatement();
                     String deleteQuery = "DELETE FROM user WHERE id_user = '" + idUser + "'";
                     st.executeUpdate(deleteQuery);
+                    ActivityLogger.logDeleteUser(this.username, namaUser);
                     loadDataUser();
                     JOptionPane.showMessageDialog(this, "Data user berhasil dihapus.");
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat menghapus data.");
+                    ActivityLogger.logError(this.username + "gagal menghapus " + namaUser);
                 }
             }
         }
@@ -148,16 +152,19 @@ public class formDataUser extends javax.swing.JPanel {
                 String username = rs.getString("username_user");
                 String password = rs.getString("password_user");
                 model.addRow(new Object[]{idUser, nama, role, email, username, password});
+                ActivityLogger.logSearching(this.username, nama);
             }
 
             // Pesan jika tidak ada data ditemukan
             if (model.getRowCount() == 0) {
                 JOptionPane.showMessageDialog(this, "Data user tidak ditemukan.", "Pencarian", JOptionPane.INFORMATION_MESSAGE);
+                ActivityLogger.logError(this.username + "gagal melakukan pencarian");
                 loadDataUser(); // Tampilkan kembali data asli jika tidak ada hasil
             }
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat mencari data.");
+            ActivityLogger.logError(this.username + "gagal melakukan pencarian");
         }
     }
 //  search user//    
@@ -230,20 +237,20 @@ public class formDataUser extends javax.swing.JPanel {
 
         tabUSer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Id User", "Nama", "Role", "Email", "Username", "Password"
+                "Id User", "Username", "Password", "Role"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -323,7 +330,7 @@ public class formDataUser extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-        formTambahUser tambahuser = new formTambahUser();
+        formTambahUser tambahuser = new formTambahUser(username);
         tambahuser.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
@@ -348,6 +355,7 @@ public class formDataUser extends javax.swing.JPanel {
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        searchUser();
         btnSearch.requestFocus();
     }//GEN-LAST:event_jTextField1ActionPerformed
 

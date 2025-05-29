@@ -8,6 +8,7 @@ import formAdmin.formUtama;
 import formKasir.formMenuUtama;
 import formOwner.formMenuUtamaOwner;
 import java.awt.Frame;
+import loging.loging.ActivityLogger;
 
 public class Login extends javax.swing.JFrame {
     
@@ -178,7 +179,7 @@ public class Login extends javax.swing.JFrame {
     // Fungsi Login Start //
     private void login(){
         Connection conn = koneksi.getConnection(); 
-        String sql = "SELECT * FROM user WHERE username_user=? AND password_user=?";   
+        String sql = "SELECT * FROM user WHERE username=? AND password=?";   
         String username = inputUsername.getText();
         String password = new String(inputPassword.getPassword());
         try{
@@ -188,39 +189,43 @@ public class Login extends javax.swing.JFrame {
             ResultSet rs = ps.executeQuery();          
             if (rs.next()) {
                 String userId = rs.getString("id_user");
-                String nama = rs.getString("nama_user");
-                String email = rs.getString("email_user");
+                String userName = rs.getString("username");
+                String Password = rs.getString("password");
                 String role = rs.getString("role");
-                String userName = rs.getString("username_user");
-                String Password = rs.getString("password_user");
                 if (role.equalsIgnoreCase("admin")){                    
                     JOptionPane.showMessageDialog(this, "berhasil login sebagai admin");
+                    ActivityLogger.logLogin(userName);
                     formUtama mainMenu = new formUtama();
                     mainMenu.setVisible(true);
-                    mainMenu.setUser(userId, nama, email, role, userName, Password);
+                    mainMenu.setUser(userId, userName, Password, role);
                     mainMenu.setExtendedState(Frame.MAXIMIZED_BOTH);
                     this.dispose();
                 }else if (role.equalsIgnoreCase("kasir")){
                     JOptionPane.showMessageDialog(this, "berhasil login sebagai kasir");
+                    ActivityLogger.logLogin(userName);
                     formMenuUtama mainMenu = new formMenuUtama();
                     mainMenu.setVisible(true);
-                    mainMenu.setUser(userId, nama, email, role, userName, Password);
+                    mainMenu.setUser(userId, userName, Password, role);
                     mainMenu.setExtendedState(Frame.MAXIMIZED_BOTH);
                     this.dispose();
                 }else if (role.equalsIgnoreCase("owner")){
                     JOptionPane.showMessageDialog(this, "berhasil login sebagai owner");
+                    ActivityLogger.logLogin(userName);
                     formMenuUtamaOwner mainMenu = new formMenuUtamaOwner();
                     mainMenu.setVisible(true);
                     mainMenu.setExtendedState(Frame.MAXIMIZED_BOTH);
                     this.dispose();
                 }else {
                     JOptionPane.showMessageDialog(this, "username atau password salah");
+                    ActivityLogger.logError(userName + " gagal melaakukan login karena salah memasukan username/password.");
                 }
             }else{
                 JOptionPane.showMessageDialog(this, "username atau password salah");
+                ActivityLogger.logError("gagal melaakukan login karena salah memasukan username/password.");
             }
         }catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage());
+            ActivityLogger.logError("Kesalahan login pada user " + username + ": " + e.getMessage());
         }  
     }
     // Fungsi Login End //

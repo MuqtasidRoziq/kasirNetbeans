@@ -8,12 +8,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import konektor.koneksi;
+import loging.loging.ActivityLogger;
 
 public class formTambahUser extends javax.swing.JFrame {
 
-
-    public formTambahUser() {
+    private final String nama;
+    
+    public formTambahUser(String nama) {
         initComponents();
+        this.nama = nama;
         inputIdUser.requestFocus();
     }
 
@@ -54,6 +57,7 @@ public class formTambahUser extends javax.swing.JFrame {
 
             if (rowsInserted > 0) {
                 JOptionPane.showMessageDialog(this, "User berhasil ditambahkan!");
+                ActivityLogger.logInsertUser(this.nama, nama);
                 inputIdUser.setText("");
                 inputFullName.setText("");
                 selectRole.setSelectedIndex(0);
@@ -65,6 +69,7 @@ public class formTambahUser extends javax.swing.JFrame {
         
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ActivityLogger.logError(this.nama + "gagal menambahkan user ");
         }
     }
 // Fungsi Tambah User End //    
@@ -325,7 +330,7 @@ public class formTambahUser extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new formTambahUser().setVisible(true);
+                new formTambahUser("").setVisible(true);
             }
         });
     }

@@ -69,7 +69,7 @@
                   <Component id="lbTambahUser" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="pnBG" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -101,33 +101,30 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="btnCancel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="btnSave" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lbEmail" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lbIdUser" min="-2" max="-2" attributes="0"/>
                                   <Component id="inputIdUser" min="-2" pref="71" max="-2" attributes="0"/>
-                                  <Component id="lbFullName" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="inputFullName" alignment="0" min="-2" pref="215" max="-2" attributes="0"/>
-                                  <Component id="lbRole" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="selectRole" alignment="0" min="-2" pref="101" max="-2" attributes="0"/>
-                                  <Component id="lbEmail" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="inputEmail" alignment="0" min="-2" pref="221" max="-2" attributes="0"/>
-                                  <Component id="lbUsername" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="inputUsername" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
                                   <Component id="lbPassword" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="inputPassword" alignment="0" min="-2" pref="233" max="-2" attributes="0"/>
+                                  <Component id="lbUsername" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="inputUsername" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
+                                  <Component id="lbRole" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="selectRole" alignment="0" min="-2" pref="101" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="12" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -138,32 +135,26 @@
                       <Component id="lbIdUser" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="inputIdUser" min="-2" pref="30" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lbFullName" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="inputFullName" min="-2" pref="30" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lbRole" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="selectRole" min="-2" pref="30" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lbEmail" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="inputEmail" min="-2" pref="30" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="lbUsername" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="inputUsername" min="-2" pref="30" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="lbPassword" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="lbEmail" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="inputPassword" min="-2" pref="30" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="lbRole" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="selectRole" min="-2" pref="30" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnCancel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           <Component id="btnSave" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="30" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -180,19 +171,6 @@
             <Component class="javax.swing.JTextField" name="inputIdUser">
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputIdUserActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lbFullName">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Arial Rounded MT Bold" size="12" style="0"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Full Name"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="inputFullName">
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputFullNameActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lbRole">
@@ -226,13 +204,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial Rounded MT Bold" size="12" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Email"/>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="inputEmail">
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputEmailActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lbUsername">
               <Properties>

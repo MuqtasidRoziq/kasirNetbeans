@@ -9,35 +9,36 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import konektor.koneksi;
+import loging.loging.ActivityLogger;
 
 public class formEditUser extends javax.swing.JFrame {
 
-    private String idUser;
+    private final String idUser;
+    private final String username;
+    private String usernameLama;
     
-    public formEditUser(String idUser, String nama, String role, String email, String username, String password) {
+    public formEditUser(String namaAdmin, String idUser, String usernameLama, String password, String role) {
         initComponents();
         inputIdUser.requestFocus();
         this.idUser = idUser;
+        this.username = namaAdmin;
         inputIdUser.setText(idUser);
-        inputFullName.setText(nama);
-        selectRole.setSelectedItem(role);
-        inputEmail.setText(email);
-        inputUsername.setText(username);
+        inputUsername.setText(usernameLama);
         inputPassword.setText(password);
+        selectRole.setSelectedItem(role);
     }
     
 // edit data user //
     private void editDataUser(){
         String IDUserLama = this.idUser;
+        String usernameLama = this.usernameLama;
         String IDUserBaru = inputIdUser.getText();
-        String nama = inputFullName.getText();
-        String role = (String) selectRole.getSelectedItem();
-        String email = inputEmail.getText();
         String username = inputUsername.getText();
         String password = inputPassword.getText();
+        String role = (String) selectRole.getSelectedItem();
 
         // Cek jika ada kolom yang kosong
-        if (IDUserBaru.isEmpty() || nama.isEmpty() || email.isEmpty() || role.isEmpty() || username.isEmpty() || password.isEmpty()) {
+        if (IDUserBaru.isEmpty() || username.isEmpty() || password.isEmpty() || role.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Semua kolom harus diisi!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -56,22 +57,22 @@ public class formEditUser extends javax.swing.JFrame {
             }
 
             // 2. Lakukan update data
-            String updateQuery = "UPDATE user SET id_user = ?, nama_user = ?, role = ?, email_user = ?, username_user = ?, password_user = ? WHERE id_user = ?";
+            String updateQuery = "UPDATE user SET id_user = ?, username = ?, password = ?, role = ?WHERE id_user = ?";
             PreparedStatement pst = con.prepareStatement(updateQuery);
 
             pst.setString(1, IDUserBaru);
-            pst.setString(2, nama);
-            pst.setString(3, role);
-            pst.setString(4, email);
-            pst.setString(5, username);
-            pst.setString(6, password);
-            pst.setString(7, IDUserLama);
+            pst.setString(2, username);
+            pst.setString(3, password);
+            pst.setString(4, role);
+            pst.setString(5, IDUserLama);
 
             int rowsAffected = pst.executeUpdate();
             if (rowsAffected > 0) {
                 JOptionPane.showMessageDialog(this, "Data user berhasil diperbarui.");
+                ActivityLogger.logEditUser(this.username, usernameLama);
             } else {
                 JOptionPane.showMessageDialog(this, "Data user gagal diperbarui.");
+                ActivityLogger.logError(this.username + "gagal mengubah data " + usernameLama);
             }
             this.dispose();
             
@@ -79,6 +80,7 @@ public class formEditUser extends javax.swing.JFrame {
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat memperbarui data.");
+            ActivityLogger.logError(this.username + "gagal mengubah data " + usernameLama);
         }
     }
 // edit data user end //   
@@ -93,12 +95,9 @@ public class formEditUser extends javax.swing.JFrame {
         pnBG = new javax.swing.JPanel();
         lbIdUser = new javax.swing.JLabel();
         inputIdUser = new javax.swing.JTextField();
-        lbFullName = new javax.swing.JLabel();
-        inputFullName = new javax.swing.JTextField();
         lbRole = new javax.swing.JLabel();
         selectRole = new javax.swing.JComboBox<>();
         lbEmail = new javax.swing.JLabel();
-        inputEmail = new javax.swing.JTextField();
         lbUsername = new javax.swing.JLabel();
         inputUsername = new javax.swing.JTextField();
         lbPassword = new javax.swing.JLabel();
@@ -128,15 +127,6 @@ public class formEditUser extends javax.swing.JFrame {
             }
         });
 
-        lbFullName.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
-        lbFullName.setText("Full Name");
-
-        inputFullName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputFullNameActionPerformed(evt);
-            }
-        });
-
         lbRole.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
         lbRole.setText("Role");
 
@@ -148,13 +138,6 @@ public class formEditUser extends javax.swing.JFrame {
         });
 
         lbEmail.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
-        lbEmail.setText("Email");
-
-        inputEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputEmailActionPerformed(evt);
-            }
-        });
 
         lbUsername.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
         lbUsername.setText("Username");
@@ -200,27 +183,24 @@ public class formEditUser extends javax.swing.JFrame {
             pnBGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnBGLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnBGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(pnBGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnBGLayout.createSequentialGroup()
                         .addComponent(btnCancel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(btnSave))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnBGLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(pnBGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbEmail)
                             .addComponent(lbIdUser)
                             .addComponent(inputIdUser, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbFullName)
-                            .addComponent(inputFullName, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbRole)
-                            .addComponent(selectRole, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbEmail)
-                            .addComponent(inputEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbPassword)
+                            .addComponent(inputPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbUsername)
                             .addComponent(inputUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbPassword)
-                            .addComponent(inputPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lbRole)
+                            .addComponent(selectRole, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         pnBGLayout.setVerticalGroup(
             pnBGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,31 +209,25 @@ public class formEditUser extends javax.swing.JFrame {
                 .addComponent(lbIdUser)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(inputIdUser, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbFullName)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(inputFullName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbRole)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(selectRole, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbEmail)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(inputEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lbUsername)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(inputUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lbPassword)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbEmail)
+                .addGap(0, 0, 0)
                 .addComponent(inputPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(lbRole)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(selectRole, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnBGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -294,38 +268,30 @@ public class formEditUser extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void inputIdUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputIdUserActionPerformed
-        inputFullName.requestFocus();
-    }//GEN-LAST:event_inputIdUserActionPerformed
-
-    private void inputFullNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputFullNameActionPerformed
-        selectRole.requestFocus();
-    }//GEN-LAST:event_inputFullNameActionPerformed
-
-    private void inputEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputEmailActionPerformed
-        inputUsername.requestFocus();
-    }//GEN-LAST:event_inputEmailActionPerformed
-
-    private void inputUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputUsernameActionPerformed
-        inputPassword.requestFocus();
-    }//GEN-LAST:event_inputUsernameActionPerformed
-
-    private void inputPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPasswordActionPerformed
-
-    }//GEN-LAST:event_inputPasswordActionPerformed
-
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        dispose();
-    }//GEN-LAST:event_btnCancelActionPerformed
-
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         editDataUser();
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void inputPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPasswordActionPerformed
+
+    }//GEN-LAST:event_inputPasswordActionPerformed
+
+    private void inputUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputUsernameActionPerformed
+        inputPassword.requestFocus();
+    }//GEN-LAST:event_inputUsernameActionPerformed
+
     private void selectRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectRoleActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_selectRoleActionPerformed
+
+    private void inputIdUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputIdUserActionPerformed
+       
+    }//GEN-LAST:event_inputIdUserActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -362,14 +328,11 @@ public class formEditUser extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnSave;
-    private javax.swing.JTextField inputEmail;
-    private javax.swing.JTextField inputFullName;
     private javax.swing.JTextField inputIdUser;
     private javax.swing.JTextField inputPassword;
     private javax.swing.JTextField inputUsername;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbEmail;
-    private javax.swing.JLabel lbFullName;
     private javax.swing.JLabel lbIdUser;
     private javax.swing.JLabel lbPassword;
     private javax.swing.JLabel lbRole;

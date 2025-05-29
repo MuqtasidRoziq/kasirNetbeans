@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class koneksi {
     
-    private static final String URL = "jdbc:mysql://localhost:3306/kasirkuu"; // Ganti dengan URL database Anda
+    private static final String URL = "jdbc:mysql://localhost:3306/db_crepes"; // Ganti dengan URL database Anda
     private static final String USERNAME = "root"; // Ganti dengan username database Anda
     private static final String PASSWORD = ""; // Ganti dengan password database Anda
 
