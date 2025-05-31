@@ -1,8 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package formAdmin;
+
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
@@ -11,20 +8,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import konektor.koneksi;
 import javax.swing.event.ListSelectionEvent;
-import loging.loging.ActivityLogger;
 
 public class formDataRasa extends javax.swing.JPanel {
-    
-    private final String username;
-    public formDataRasa(String username) {
+
+    public formDataRasa() {
         initComponents();
-        this.username = username;
         loadDataProduk();
-        
+
 //      Menonaktifkan tombol Edit dan Delete saat pertama kali dibuka
         btnEdit.setEnabled(false);
         btnHapus.setEnabled(false);
-        
+
 //      Menambahkan ListSelectionListener ke tabel
         tabProduk.getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
             // Cek jika ada baris yang dipilih
@@ -37,10 +31,8 @@ public class formDataRasa extends javax.swing.JPanel {
             }
         });
     }
-    
-    
+
 //  Fungsi loadDataProduk //
-    
     private void loadDataProduk() {
         DefaultTableModel model = (DefaultTableModel) tabProduk.getModel();
         model.setRowCount(0);
@@ -48,7 +40,7 @@ public class formDataRasa extends javax.swing.JPanel {
         try {
             Connection con = koneksi.getConnection();
             Statement st = con.createStatement();
-            String query = "SELECT id_rasa, rasa FROM rasa"; 
+            String query = "SELECT id_rasa, rasa FROM rasa";
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
@@ -60,44 +52,17 @@ public class formDataRasa extends javax.swing.JPanel {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    } 
-        
-//  Fungsi loadDataProduk END //    
-    
-//  Fungsi editProduk //
-    
-    private void editDataProduk(){
-        int selectedRow = tabProduk.getSelectedRow();
-        if (selectedRow != -1) {
-            String nama = this.username;
-            String idRasa = tabProduk.getValueAt(selectedRow, 0).toString();
-            String rasaLama = tabProduk.getValueAt(selectedRow, 1).toString();
-
-        //   Buka form edit dengan data pengguna yang dipilih
-            formEditRasa editRasa = new formEditRasa(nama, idRasa, rasaLama);
-            editRasa.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                //  Muat ulang data tabel setelah form edit ditutup
-                    loadDataProduk();
-                }
-            });
-            editRasa.setVisible(true);
-            
-        }
     }
-    
-//  Fungsi editProduk END //
+//  Fungsi loadDataProduk END //  
     
 //  Fungsi deleteProduk //
-    
-    private void hapusDataProduk(){
+    private void hapusDataProduk() {
         int selectedRow = tabProduk.getSelectedRow();
         if (selectedRow != -1) {
             String idProduk = tabProduk.getValueAt(selectedRow, 0).toString();
-            String namaProduk = tabProduk.getValueAt(selectedRow, 1). toString();
+            String namaRasa = tabProduk.getValueAt(selectedRow, 1).toString();
             // Konfirmasi dan hapus data dari database berdasarkan ID
-            int confirm = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin menghapus profuk ini?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin menghapus "+ namaRasa + " ?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 try {
                     Connection con = koneksi.getConnection();
@@ -106,18 +71,16 @@ public class formDataRasa extends javax.swing.JPanel {
                     st.executeUpdate(deleteQuery);
                     loadDataProduk();
                     JOptionPane.showMessageDialog(this, "produk berhasil dihapus.");
-                    ActivityLogger.logDeleteProduk(username, namaProduk);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat menghapus data.");
                 }
             }
         }
     }
-    
 //  Fungsi deleteProduk END //
     
 //  Fungsi cariProduk //
-    private void searchProduk(){
+    private void searchProduk() {
         String keyword = inputSearching.getText().trim();
         DefaultTableModel model = (DefaultTableModel) tabProduk.getModel();
 
@@ -126,7 +89,7 @@ public class formDataRasa extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Kolom pencarian harus diisi!", "Peringatan", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         model.setRowCount(0);
 
         try {
@@ -134,39 +97,53 @@ public class formDataRasa extends javax.swing.JPanel {
             Statement st = con.createStatement();
 
             // Query untuk mencari data user berdasarkan ID, Nama, atau Email yang cocok dengan kata kunci
-            String query = "SELECT id_rasa, rasa " +
-                            "FROM rasa WHERE id_rasa LIKE '%" + keyword + "%' " +
-                            "OR nama_produk LIKE '%" + keyword + "%' ";
+            String query = "SELECT id_rasa, rasa "
+                    + "FROM rasa WHERE id_rasa LIKE '%" + keyword + "%' "
+                    + "OR rasa LIKE '%" + keyword + "%' ";
 
             ResultSet rs = st.executeQuery(query);
-            
+
             // Jika data ditemukan, tambahkan ke model tabel
             while (rs.next()) {
                 String idRasa = rs.getString("id_rasa");
                 String namaRasa = rs.getString("rasa");
                 model.addRow(new Object[]{idRasa, namaRasa});
-                ActivityLogger.logSearchProduk(this.username, namaRasa);
             }
 
             // Pesan jika tidak ada data ditemukan
             if (model.getRowCount() == 0) {
                 JOptionPane.showMessageDialog(this, "Data Rasa tidak ditemukan.", "Pencarian", JOptionPane.INFORMATION_MESSAGE);
-                loadDataProduk(); 
+                loadDataProduk();
             }
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat mencari data.");
         }
     }
-    
 //  Fungsi cariProduk END //  
     
-    
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        FormTambahRasa = new javax.swing.JDialog();
+        jSeparator1 = new javax.swing.JSeparator();
+        lblTambahRasa = new javax.swing.JLabel();
+        lblIdRasa = new javax.swing.JLabel();
+        txtIdRasa = new javax.swing.JTextField();
+        txtTambahRasa = new javax.swing.JTextField();
+        lblRasa = new javax.swing.JLabel();
+        btnSaveAdd = new javax.swing.JButton();
+        btnCancelAdd = new javax.swing.JButton();
+        formEditRasa = new javax.swing.JDialog();
+        lblRasa1 = new javax.swing.JLabel();
+        btnSaveEdit = new javax.swing.JButton();
+        btnCancelEdit = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        lblEditRasa = new javax.swing.JLabel();
+        lblIdRasa1 = new javax.swing.JLabel();
+        txtIdEditRasa = new javax.swing.JTextField();
+        txtEditRasa = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         btnTambah = new javax.swing.JButton();
@@ -176,6 +153,156 @@ public class formDataRasa extends javax.swing.JPanel {
         btnSearch = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabProduk = new javax.swing.JTable();
+
+        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
+
+        lblTambahRasa.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lblTambahRasa.setText("Tambah Rasa");
+
+        lblIdRasa.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblIdRasa.setText("Id Rasa");
+
+        lblRasa.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblRasa.setText("Rasa");
+
+        btnSaveAdd.setBackground(new java.awt.Color(0, 0, 255));
+        btnSaveAdd.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnSaveAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnSaveAdd.setText("Save");
+        btnSaveAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveAddActionPerformed(evt);
+            }
+        });
+
+        btnCancelAdd.setBackground(new java.awt.Color(0, 0, 255));
+        btnCancelAdd.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnCancelAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelAdd.setText("Cancel");
+        btnCancelAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelAddActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout FormTambahRasaLayout = new javax.swing.GroupLayout(FormTambahRasa.getContentPane());
+        FormTambahRasa.getContentPane().setLayout(FormTambahRasaLayout);
+        FormTambahRasaLayout.setHorizontalGroup(
+            FormTambahRasaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FormTambahRasaLayout.createSequentialGroup()
+                .addContainerGap(63, Short.MAX_VALUE)
+                .addComponent(lblTambahRasa)
+                .addGap(63, 63, 63))
+            .addGroup(FormTambahRasaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(FormTambahRasaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtIdRasa, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblIdRasa)
+                    .addComponent(txtTambahRasa, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblRasa)
+                    .addGroup(FormTambahRasaLayout.createSequentialGroup()
+                        .addComponent(btnSaveAdd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCancelAdd)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        FormTambahRasaLayout.setVerticalGroup(
+            FormTambahRasaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FormTambahRasaLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblTambahRasa)
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblIdRasa)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtIdRasa, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblRasa)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtTambahRasa, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(FormTambahRasaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSaveAdd)
+                    .addComponent(btnCancelAdd))
+                .addGap(19, 19, 19))
+        );
+
+        lblRasa1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblRasa1.setText("Rasa");
+
+        btnSaveEdit.setBackground(new java.awt.Color(0, 0, 255));
+        btnSaveEdit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnSaveEdit.setForeground(new java.awt.Color(255, 255, 255));
+        btnSaveEdit.setText("Save");
+        btnSaveEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveEditActionPerformed(evt);
+            }
+        });
+
+        btnCancelEdit.setBackground(new java.awt.Color(0, 0, 255));
+        btnCancelEdit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnCancelEdit.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelEdit.setText("Cancel");
+        btnCancelEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelEditActionPerformed(evt);
+            }
+        });
+
+        jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
+
+        lblEditRasa.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lblEditRasa.setText("Edit Rasa");
+
+        lblIdRasa1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblIdRasa1.setText("Id Rasa");
+
+        javax.swing.GroupLayout formEditRasaLayout = new javax.swing.GroupLayout(formEditRasa.getContentPane());
+        formEditRasa.getContentPane().setLayout(formEditRasaLayout);
+        formEditRasaLayout.setHorizontalGroup(
+            formEditRasaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator2)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, formEditRasaLayout.createSequentialGroup()
+                .addContainerGap(88, Short.MAX_VALUE)
+                .addComponent(lblEditRasa)
+                .addGap(88, 88, 88))
+            .addGroup(formEditRasaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(formEditRasaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtIdEditRasa, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblIdRasa1)
+                    .addComponent(txtEditRasa, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblRasa1)
+                    .addGroup(formEditRasaLayout.createSequentialGroup()
+                        .addComponent(btnSaveEdit)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCancelEdit)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        formEditRasaLayout.setVerticalGroup(
+            formEditRasaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, formEditRasaLayout.createSequentialGroup()
+                .addContainerGap(19, Short.MAX_VALUE)
+                .addComponent(lblEditRasa)
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblIdRasa1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtIdEditRasa, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblRasa1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtEditRasa, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(formEditRasaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSaveEdit)
+                    .addComponent(btnCancelEdit))
+                .addGap(19, 19, 19))
+        );
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -320,18 +447,27 @@ public class formDataRasa extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-        formTambahProduk tambahProduk = new formTambahProduk(username);
-        tambahProduk.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                loadDataProduk();
-                }
-            });
-        tambahProduk.setVisible(true);
+        // Kosongkan field input
+        txtIdRasa.setText("");
+        txtTambahRasa.setText("");
+        FormTambahRasa.pack();
+        FormTambahRasa.setLocationRelativeTo(this);
+        FormTambahRasa.setModal(true);
+        FormTambahRasa.setVisible(true);
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        editDataProduk();
+        int selectedRow = tabProduk.getSelectedRow();
+        if (selectedRow != -1) {
+            String IdRasa = tabProduk.getValueAt(selectedRow, 0).toString();
+            String Rasa = tabProduk.getValueAt(selectedRow, 1).toString();
+            txtIdEditRasa.setText(IdRasa);
+            txtEditRasa.setText(Rasa);
+            formEditRasa.pack();
+            formEditRasa.setLocationRelativeTo(this);
+            formEditRasa.setModal(true);
+            formEditRasa.setVisible(true);
+        }
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
@@ -346,16 +482,90 @@ public class formDataRasa extends javax.swing.JPanel {
         searchProduk();
     }//GEN-LAST:event_inputSearchingActionPerformed
 
+    private void btnSaveAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAddActionPerformed
+        String idRasa = txtIdRasa.getText().trim();
+        String namaRasa = txtTambahRasa.getText().trim();
+
+        if (idRasa.isEmpty() || namaRasa.isEmpty()) {
+            JOptionPane.showMessageDialog(FormTambahRasa, "Semua kolom harus diisi!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            Connection con = koneksi.getConnection();
+            Statement st = con.createStatement();
+            String insertQuery = "INSERT INTO rasa (id_rasa, rasa) VALUES ('" + idRasa + "', '" + namaRasa + "')";
+            st.executeUpdate(insertQuery);
+
+            FormTambahRasa.dispose();
+            loadDataProduk();
+            JOptionPane.showMessageDialog(this, "Data rasa berhasil ditambahkan.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(FormTambahRasa, "Gagal menambahkan data: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnSaveAddActionPerformed
+
+    private void btnSaveEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveEditActionPerformed
+        String idRasa = txtIdEditRasa.getText().trim();
+        String namaRasa = txtEditRasa.getText().trim();
+
+        if (namaRasa.isEmpty()) {
+            JOptionPane.showMessageDialog(formEditRasa, "Kolom Rasa harus diisi!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Connection con = null;
+        Statement st = null;
+        try {
+            con = koneksi.getConnection();
+            st = con.createStatement();
+            String updateQuery = "UPDATE rasa SET rasa = '" + namaRasa + "' WHERE id_rasa = '" + idRasa + "'";
+            st.executeUpdate(updateQuery);
+
+            formEditRasa.dispose();
+            loadDataProduk();
+            JOptionPane.showMessageDialog(this, "Data rasa berhasil diperbarui.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(formEditRasa, "Gagal memperbarui data: " + e.getMessage());
+        } 
+    }//GEN-LAST:event_btnSaveEditActionPerformed
+
+    private void btnCancelEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelEditActionPerformed
+        formEditRasa.dispose();
+    }//GEN-LAST:event_btnCancelEditActionPerformed
+
+    private void btnCancelAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelAddActionPerformed
+        FormTambahRasa.dispose();
+    }//GEN-LAST:event_btnCancelAddActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog FormTambahRasa;
+    private javax.swing.JButton btnCancelAdd;
+    private javax.swing.JButton btnCancelEdit;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnSaveAdd;
+    private javax.swing.JButton btnSaveEdit;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnTambah;
+    private javax.swing.JDialog formEditRasa;
     private javax.swing.JTextField inputSearching;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JLabel lblEditRasa;
+    private javax.swing.JLabel lblIdRasa;
+    private javax.swing.JLabel lblIdRasa1;
+    private javax.swing.JLabel lblRasa;
+    private javax.swing.JLabel lblRasa1;
+    private javax.swing.JLabel lblTambahRasa;
     private javax.swing.JTable tabProduk;
+    private javax.swing.JTextField txtEditRasa;
+    private javax.swing.JTextField txtIdEditRasa;
+    private javax.swing.JTextField txtIdRasa;
+    private javax.swing.JTextField txtTambahRasa;
     // End of variables declaration//GEN-END:variables
 }

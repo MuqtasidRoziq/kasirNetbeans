@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import konektor.koneksi;
 import formAdmin.formUtama;
-import formKasir.formMenuUtama;
 import formOwner.formMenuUtamaOwner;
 import java.awt.Frame;
 import loging.loging.ActivityLogger;
@@ -195,19 +194,13 @@ public class Login extends javax.swing.JFrame {
                 if (role.equalsIgnoreCase("admin")){                    
                     JOptionPane.showMessageDialog(this, "berhasil login sebagai admin");
                     ActivityLogger.logLogin(userName);
-                    formUtama mainMenu = new formUtama();
+                    formUtama mainMenu = new formUtama(username);
                     mainMenu.setVisible(true);
                     mainMenu.setUser(userId, userName, Password, role);
                     mainMenu.setExtendedState(Frame.MAXIMIZED_BOTH);
                     this.dispose();
                 }else if (role.equalsIgnoreCase("kasir")){
-                    JOptionPane.showMessageDialog(this, "berhasil login sebagai kasir");
-                    ActivityLogger.logLogin(userName);
-                    formMenuUtama mainMenu = new formMenuUtama();
-                    mainMenu.setVisible(true);
-                    mainMenu.setUser(userId, userName, Password, role);
-                    mainMenu.setExtendedState(Frame.MAXIMIZED_BOTH);
-                    this.dispose();
+                     
                 }else if (role.equalsIgnoreCase("owner")){
                     JOptionPane.showMessageDialog(this, "berhasil login sebagai owner");
                     ActivityLogger.logLogin(userName);
