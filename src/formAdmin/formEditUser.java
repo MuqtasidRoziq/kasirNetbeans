@@ -9,17 +9,22 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import konektor.koneksi;
+import loging.loging.ActivityLogger;
 
 public class formEditUser extends javax.swing.JFrame {
 
     private String idUser;
+    private String nama;
+    private String namaLama;
     
-    public formEditUser(String idUser, String nama, String role, String email, String username, String password) {
+    public formEditUser(String namaAdmin, String idUser, String namaLama, String role, String email, String username, String password) {
         initComponents();
         inputIdUser.requestFocus();
         this.idUser = idUser;
+        this.nama = namaAdmin;
+        this.namaLama = namaLama;
         inputIdUser.setText(idUser);
-        inputFullName.setText(nama);
+        inputFullName.setText(namaLama);
         selectRole.setSelectedItem(role);
         inputEmail.setText(email);
         inputUsername.setText(username);
@@ -29,6 +34,7 @@ public class formEditUser extends javax.swing.JFrame {
 // edit data user //
     private void editDataUser(){
         String IDUserLama = this.idUser;
+        String namaLama = this.namaLama;
         String IDUserBaru = inputIdUser.getText();
         String nama = inputFullName.getText();
         String role = (String) selectRole.getSelectedItem();
@@ -70,8 +76,10 @@ public class formEditUser extends javax.swing.JFrame {
             int rowsAffected = pst.executeUpdate();
             if (rowsAffected > 0) {
                 JOptionPane.showMessageDialog(this, "Data user berhasil diperbarui.");
+                ActivityLogger.logEditUser(this.nama, namaLama);
             } else {
                 JOptionPane.showMessageDialog(this, "Data user gagal diperbarui.");
+                ActivityLogger.logError(this.nama + "gagal mengubah data " + namaLama);
             }
             this.dispose();
             
@@ -79,6 +87,7 @@ public class formEditUser extends javax.swing.JFrame {
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat memperbarui data.");
+            ActivityLogger.logError(this.nama + "gagal mengubah data " + namaLama);
         }
     }
 // edit data user end //   

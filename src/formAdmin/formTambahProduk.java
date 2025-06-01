@@ -5,11 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import konektor.koneksi;
+import loging.loging.ActivityLogger;
 
 public class formTambahProduk extends javax.swing.JFrame {
 
-    public formTambahProduk() {
+    private final String nama;
+    
+    public formTambahProduk(String nama) {
         initComponents();
+        this.nama = nama;
     }
 
 //  Fungsi addProduk //
@@ -49,7 +53,7 @@ public class formTambahProduk extends javax.swing.JFrame {
 
             if (rowsInserted > 0) {
                 JOptionPane.showMessageDialog(this, "Produk berhasil ditambahkan!");
-                // Kosongkan field setelah data berhasil disimpan
+                ActivityLogger.logInsertProduk(this.nama, namaProduk);
                 inputIdProduk.setText("");
                 inputNamaProduk.setText("");
                 inputHargaBeli.setText("");
@@ -363,7 +367,7 @@ public class formTambahProduk extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new formTambahProduk().setVisible(true);
+                new formTambahProduk("").setVisible(true);
             }
         });
     }

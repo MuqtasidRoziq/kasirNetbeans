@@ -1,4 +1,5 @@
 package formOwner;
+
 import java.awt.*;
 import org.jfree.chart.*;
 import java.sql.*;
@@ -10,7 +11,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 public class formPenjualan extends javax.swing.JPanel {
 
     private Connection connection;
-    
+
     public formPenjualan() {
         initComponents();
         connection = konektor.koneksi.getConnection();
@@ -21,22 +22,20 @@ public class formPenjualan extends javax.swing.JPanel {
         try {
             // Query untuk total produk terjual
             String queryProdukTerjual = "SELECT SUM(jumlah) AS total FROM detail_transaksi";
-            try (PreparedStatement ps = connection.prepareStatement(queryProdukTerjual);
-                 ResultSet rs = ps.executeQuery()) {
+            try (PreparedStatement ps = connection.prepareStatement(queryProdukTerjual); ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     lbProdukTerjual.setText(String.valueOf(rs.getInt("total")));
                 }
             }
 
             // Query untuk produk terlaris
-            String queryProdukTerlaris = 
-                "SELECT p.nama_produk, SUM(d.jumlah) AS total " +
-                "FROM detail_transaksi d " +
-                "JOIN produk p ON d.id_produk = p.id_produk " +
-                "GROUP BY p.nama_produk " +
-                "ORDER BY total DESC LIMIT 1";
-            try (PreparedStatement ps = connection.prepareStatement(queryProdukTerlaris);
-                 ResultSet rs = ps.executeQuery()) {
+            String queryProdukTerlaris
+                    = "SELECT p.nama_produk, SUM(d.jumlah) AS total "
+                    + "FROM detail_transaksi d "
+                    + "JOIN produk p ON d.id_produk = p.id_produk "
+                    + "GROUP BY p.nama_produk "
+                    + "ORDER BY total DESC LIMIT 1";
+            try (PreparedStatement ps = connection.prepareStatement(queryProdukTerlaris); ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     lbProdukTerlaris.setText(rs.getString("nama_produk"));
                 }
@@ -44,26 +43,24 @@ public class formPenjualan extends javax.swing.JPanel {
 
             // Query untuk stok produk
             String queryStokProduk = "SELECT SUM(stok) AS total_stok FROM produk";
-            try (PreparedStatement ps = connection.prepareStatement(queryStokProduk);
-                 ResultSet rs = ps.executeQuery()) {
+            try (PreparedStatement ps = connection.prepareStatement(queryStokProduk); ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     lbStok.setText(String.valueOf(rs.getInt("total_stok")));
                 }
             }
-            
+
             String queryKinerjaKasir = "SELECT u.nama_user AS kasir, COUNT(t.id_transaksi) AS total_transaksi "
-                                        + "FROM transaksi t "
-                                        + "JOIN user u ON t.id_user = u.id_user "
-                                        + "WHERE u.role = 'kasir' "
-                                        + "GROUP BY t.id_user, u.nama_user "
-                                        + "ORDER BY total_transaksi DESC LIMIT 1;";
-            try (PreparedStatement ps = connection.prepareStatement(queryKinerjaKasir);
-                 ResultSet rs = ps.executeQuery()) {
-                if (rs.next()){
+                    + "FROM transaksi t "
+                    + "JOIN user u ON t.id_user = u.id_user "
+                    + "WHERE u.role = 'kasir' "
+                    + "GROUP BY t.id_user, u.nama_user "
+                    + "ORDER BY total_transaksi DESC LIMIT 1;";
+            try (PreparedStatement ps = connection.prepareStatement(queryKinerjaKasir); ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
                     lbNamaKasir.setText(rs.getString("kasir"));
                 }
             }
-            
+
             GrafikPenjualan();
             GrafikProdukTerlaris();
 
@@ -76,8 +73,7 @@ public class formPenjualan extends javax.swing.JPanel {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         try {
             String query = "SELECT MONTH(tanggal_transaksi) AS bulan, SUM(total_harga) AS total_penjualan FROM transaksi GROUP BY MONTH(tanggal_transaksi)";
-            try (PreparedStatement ps = connection.prepareStatement(query);
-                 ResultSet rs = ps.executeQuery()) {
+            try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     int bulan = rs.getInt("bulan");
                     double total = rs.getDouble("total_penjualan");
@@ -89,7 +85,7 @@ public class formPenjualan extends javax.swing.JPanel {
             e.printStackTrace();
         }
 
-        JFreeChart chart = ChartFactory.createBarChart( "","Bulan", "", dataset);
+        JFreeChart chart = ChartFactory.createBarChart("", "Bulan", "", dataset);
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new Dimension(400, 300));
 
@@ -99,24 +95,24 @@ public class formPenjualan extends javax.swing.JPanel {
         pnGrafikPenjualan.revalidate();
         pnGrafikPenjualan.repaint();
     }
+
     private void GrafikProdukTerlaris() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         try {
             String query = "SELECT p.nama_produk, SUM(dt.jumlah) AS total_terjual FROM detail_transaksi dt JOIN produk p ON dt.id_produk = p.id_produk GROUP BY p.nama_produk ORDER BY total_terjual DESC LIMIT 10";
-            try (PreparedStatement ps = connection.prepareStatement(query);
-                 ResultSet rs = ps.executeQuery()) {
+            try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     String namaProduk = rs.getString("nama_produk");
                     int totalTerjual = rs.getInt("total_terjual");
-                    dataset.addValue(totalTerjual, namaProduk, ""); 
+                    dataset.addValue(totalTerjual, namaProduk, "");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        JFreeChart chart = ChartFactory.createBarChart( "","produk", "", dataset);
-        
+        JFreeChart chart = ChartFactory.createBarChart("", "produk", "", dataset);
+
         // Kustomisasi warna batang
         CategoryPlot plot = chart.getCategoryPlot();
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
@@ -124,22 +120,22 @@ public class formPenjualan extends javax.swing.JPanel {
         // Warna-warna untuk batang
         Color[] colors = {
             new Color(79, 129, 189), // Biru
-            new Color(192, 80, 77),  // Merah
+            new Color(192, 80, 77), // Merah
             new Color(155, 187, 89), // Hijau
             new Color(128, 100, 162),// Ungu
             new Color(75, 172, 198), // Biru Muda
             new Color(247, 150, 70), // Oranye
             new Color(146, 208, 80), // Hijau Terang
-            new Color(255, 192, 0),  // Kuning
+            new Color(255, 192, 0), // Kuning
             new Color(112, 48, 160), // Ungu Gelap
-            new Color(255, 128, 0)   // Oranye Terang
+            new Color(255, 128, 0) // Oranye Terang
         };
 
         // Atur warna untuk setiap batang
         for (int i = 0; i < dataset.getRowCount(); i++) {
             renderer.setSeriesPaint(i, colors[i % colors.length]);
         }
-        
+
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new Dimension(400, 300));
 
@@ -155,7 +151,6 @@ public class formPenjualan extends javax.swing.JPanel {
         String[] namaBulan = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
         return namaBulan[bulan - 1];
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

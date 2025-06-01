@@ -12,12 +12,14 @@ import java.sql.Statement;
 import konektor.koneksi;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import loging.loging.ActivityLogger;
 
 public class formDataProduk extends javax.swing.JPanel {
     
-
-    public formDataProduk() {
+    private final String nama;
+    public formDataProduk(String nama) {
         initComponents();
+        this.nama = nama;
         loadDataProduk();
         
 //      Menonaktifkan tombol Edit dan Delete saat pertama kali dibuka
@@ -45,7 +47,7 @@ public class formDataProduk extends javax.swing.JPanel {
     
     private void loadDataProduk() {
         DefaultTableModel model = (DefaultTableModel) tabProduk.getModel();
-        model.setRowCount(0); // Reset tabel
+        model.setRowCount(0);
 
         try {
             Connection con = koneksi.getConnection();
@@ -76,15 +78,16 @@ public class formDataProduk extends javax.swing.JPanel {
     private void editDataProduk(){
         int selectedRow = tabProduk.getSelectedRow();
         if (selectedRow != -1) {
+            String nama = this.nama;
             String idProduk = tabProduk.getValueAt(selectedRow, 0).toString();
-            String namaProduk = tabProduk.getValueAt(selectedRow, 1).toString();
+            String produkLama = tabProduk.getValueAt(selectedRow, 1).toString();
             String hargaBeli = tabProduk.getValueAt(selectedRow, 2).toString();
             String hargaJual = tabProduk.getValueAt(selectedRow, 3).toString();
             String stokProduk = tabProduk.getValueAt(selectedRow, 4).toString();
             String satuanProduk = tabProduk.getValueAt(selectedRow, 5).toString();
 
         //   Buka form edit dengan data pengguna yang dipilih
-            formEditProduk editProduk = new formEditProduk(idProduk, namaProduk, hargaBeli, hargaJual, stokProduk, satuanProduk);
+            formEditProduk editProduk = new formEditProduk(nama, idProduk, produkLama, hargaBeli, hargaJual, stokProduk, satuanProduk);
             editProduk.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent windowEvent) {
@@ -105,6 +108,7 @@ public class formDataProduk extends javax.swing.JPanel {
         int selectedRow = tabProduk.getSelectedRow();
         if (selectedRow != -1) {
             String idProduk = tabProduk.getValueAt(selectedRow, 0).toString();
+            String namaProduk = tabProduk.getValueAt(selectedRow, 1). toString();
             // Konfirmasi dan hapus data dari database berdasarkan ID
             int confirm = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin menghapus profuk ini?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
@@ -115,6 +119,7 @@ public class formDataProduk extends javax.swing.JPanel {
                     st.executeUpdate(deleteQuery);
                     loadDataProduk();
                     JOptionPane.showMessageDialog(this, "produk berhasil dihapus.");
+                    ActivityLogger.logDeleteProduk(nama, namaProduk);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat menghapus data.");
                 }
@@ -147,7 +152,7 @@ public class formDataProduk extends javax.swing.JPanel {
                             "OR nama_produk LIKE '%" + keyword + "%' ";
 
             ResultSet rs = st.executeQuery(query);
-
+            
             // Jika data ditemukan, tambahkan ke model tabel
             while (rs.next()) {
                 String idProduk = rs.getString("id_produk");
@@ -157,12 +162,13 @@ public class formDataProduk extends javax.swing.JPanel {
                 String stokProduk = rs.getString("stok");
                 String satuanProduk = rs.getString("satuan");
                 model.addRow(new Object[]{idProduk, namaProduk, hargaBeli, hargaJual, stokProduk, satuanProduk});
+                ActivityLogger.logSearchProduk(this.nama, namaProduk);
             }
 
             // Pesan jika tidak ada data ditemukan
             if (model.getRowCount() == 0) {
                 JOptionPane.showMessageDialog(this, "Data user tidak ditemukan.", "Pencarian", JOptionPane.INFORMATION_MESSAGE);
-                loadDataProduk(); // Tampilkan kembali data asli jika tidak ada hasil
+                loadDataProduk(); 
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -331,7 +337,7 @@ public class formDataProduk extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-        formTambahProduk tambahProduk = new formTambahProduk();
+        formTambahProduk tambahProduk = new formTambahProduk(nama);
         tambahProduk.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {

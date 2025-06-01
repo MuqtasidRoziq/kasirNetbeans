@@ -4,6 +4,7 @@ import formLogin.Login;
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
+import formOwner.formPenjualan;
 
 public class formUtama extends javax.swing.JFrame {
 
@@ -28,11 +29,7 @@ public class formUtama extends javax.swing.JFrame {
         this.userName = userName;
         this.Password = Password;
     }
-//  set nama user yang login end //
-
-//  set menu item //
     private void execute() {
-        // icon list//
         ImageIcon iconHome = new ImageIcon(getClass().getResource("/image/home.png"));
         ImageIcon iconProfile = new ImageIcon(getClass().getResource("/image/profile.png"));
         ImageIcon iconDataUser = new ImageIcon(getClass().getResource("/image/data user.png"));
@@ -45,7 +42,7 @@ public class formUtama extends javax.swing.JFrame {
         
         formMenuList menuHome = new formMenuList(iconHome, false, null, "Home", (ActionEvent e) -> {
             isiContent.removeAll();
-            isiContent.add(new formHome());
+            isiContent.add(new formPenjualan());
             isiContent.repaint();
             isiContent.revalidate();
         });
@@ -57,13 +54,13 @@ public class formUtama extends javax.swing.JFrame {
         });
         formMenuList menuDataUser = new formMenuList(iconDataUser, false, null, "Data User", (ActionEvent e) -> {
             isiContent.removeAll();
-            isiContent.add(new formDataUser());
+            isiContent.add(new formDataUser(nama));
             isiContent.repaint();
             isiContent.revalidate();
         });
         formMenuList menuDataProduk = new formMenuList(iconDataProduk, false, null, "Data Produk", (ActionEvent e) -> {
             isiContent.removeAll();
-            isiContent.add(new formDataProduk());
+            isiContent.add(new formDataProduk(nama));
             isiContent.repaint();
             isiContent.revalidate();
         });
@@ -203,7 +200,7 @@ public class formUtama extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        isiContent.add(new formHome());
+        isiContent.add(new formPenjualan());
         isiContent.repaint();
         isiContent.revalidate();
     }//GEN-LAST:event_formWindowOpened

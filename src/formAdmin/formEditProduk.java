@@ -5,18 +5,20 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import konektor.koneksi;
+import loging.loging.ActivityLogger;
 
 public class formEditProduk extends javax.swing.JFrame {
     
     private String idProduk;
+    private String nama;
+    private String produkLama;
     
-    public formEditProduk(String idProduk, String namaProduk, String hargaBeli, String hargaJual, String stokProduk, String satuanProduk) {
+    public formEditProduk(String nama, String idProduk, String produkLama, String hargaBeli, String hargaJual, String stokProduk, String satuanProduk) {
         initComponents();
-        
-    //  Simpan IdProduk dan data lainnya
+        this.nama = nama;
         this.idProduk = idProduk;
         inputIdProduk.setText(idProduk);
-        inputNamaProduk.setText(namaProduk);
+        inputNamaProduk.setText(produkLama);
         inputHargaBeli.setText(hargaBeli);
         inputHargaJual.setText(hargaJual);
         inputStok.setText(stokProduk);
@@ -30,6 +32,7 @@ public class formEditProduk extends javax.swing.JFrame {
 // edit dataProduk  //
     private void editDataProduk(){
         String IdProdukLama = this.idProduk;
+        String produkLama = this.produkLama;
         String idProdukBaru = inputIdProduk.getText();
         String namaProduk = inputNamaProduk.getText();
         String hargaBeli = inputHargaBeli.getText();
@@ -69,6 +72,7 @@ public class formEditProduk extends javax.swing.JFrame {
             int rowsAffected = pst.executeUpdate();
             if (rowsAffected > 0) {
                 JOptionPane.showMessageDialog(this, "Produk berhasil diperbarui.");
+                ActivityLogger.logEditProduk(this.nama, produkLama);
             } else {
                 JOptionPane.showMessageDialog(this, "Produk gagal diperbarui.");
             }

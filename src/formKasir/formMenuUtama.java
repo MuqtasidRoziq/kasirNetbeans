@@ -3,11 +3,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import formAdmin.formMenuList;
 import formLogin.Login;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JFrame;
 
 /**
  *
- * @author muqta
+ * @author r
  */
 public class formMenuUtama extends javax.swing.JFrame {
 
@@ -22,6 +24,8 @@ public class formMenuUtama extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);   
         execute();
+        Date(); 
+        
     }
     
     //  set nama user yang login start //    
@@ -32,6 +36,9 @@ public class formMenuUtama extends javax.swing.JFrame {
         this.role = role;
         this.userName = userName;
         this.Password = Password;
+        lb_u.setText("Selamat Datang, " + this.userName ); // Perbarui label
+        lblrole.setText(this.role ); // Perbarui label
+  
     }
 //  set nama user yang login end //
     
@@ -42,6 +49,9 @@ public class formMenuUtama extends javax.swing.JFrame {
         header = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        lb_u = new javax.swing.JLabel();
+        lblrole = new javax.swing.JLabel();
+        lb_tanggal = new javax.swing.JLabel();
         menuList = new javax.swing.JPanel();
         listMenuItemKasir = new javax.swing.JPanel();
         content = new javax.swing.JPanel();
@@ -62,6 +72,15 @@ public class formMenuUtama extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/logoKasir.png"))); // NOI18N
         jLabel1.setText("Toko Kami");
 
+        lb_u.setFont(new java.awt.Font("Schadow BT", 1, 14)); // NOI18N
+        lb_u.setText("Nama User");
+
+        lblrole.setFont(new java.awt.Font("Schadow BT", 1, 18)); // NOI18N
+        lblrole.setText("Role");
+
+        lb_tanggal.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        lb_tanggal.setText("Tanggal");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -69,13 +88,29 @@ public class formMenuUtama extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(527, Short.MAX_VALUE))
+                .addGap(61, 61, 61)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblrole, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lb_u)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 279, Short.MAX_VALUE)
+                        .addComponent(lb_tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblrole)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lb_u)
+                            .addComponent(lb_tanggal)))
+                    .addComponent(jLabel1))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
@@ -181,6 +216,9 @@ public class formMenuUtama extends javax.swing.JFrame {
     private javax.swing.JPanel isiContent;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lb_tanggal;
+    private javax.swing.JLabel lb_u;
+    private javax.swing.JLabel lblrole;
     private javax.swing.JPanel listMenuItemKasir;
     private javax.swing.JPanel menuList;
     // End of variables declaration//GEN-END:variables
@@ -228,5 +266,10 @@ public class formMenuUtama extends javax.swing.JFrame {
         listMenuItemKasir.revalidate();
         listMenuItemKasir.repaint();
     }
-    
+    private void Date() {
+        Date TanggalSekarang = new Date();
+        SimpleDateFormat TanggalWaktu = new SimpleDateFormat("dd - MM - yyyy");
+        String tanggal = TanggalWaktu.format(TanggalSekarang);
+        lb_tanggal.setText(tanggal);
+    }
 }

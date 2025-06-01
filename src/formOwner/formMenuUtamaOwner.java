@@ -59,7 +59,7 @@ public class formMenuUtamaOwner extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(100, 94));
 
         jLabel1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/logoKasir.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/market-icons-15733-removebg-preview.png"))); // NOI18N
         jLabel1.setText("Toko Kami");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -76,7 +76,7 @@ public class formMenuUtamaOwner extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
@@ -191,7 +191,7 @@ public class formMenuUtamaOwner extends javax.swing.JFrame {
     private void execute() {
         
         // gambar icon //
-        ImageIcon iconkasir = new ImageIcon(getClass().getResource("/image/kasir.png"));
+        ImageIcon iconkasir = new ImageIcon(getClass().getResource("/image/home.png"));
         ImageIcon iconRiwayatTransaksi = new ImageIcon(getClass().getResource("/image/riwayat.png"));
         ImageIcon iconLaporan = new ImageIcon(getClass().getResource("/image/laporan.png"));
         ImageIcon iconLogout = new ImageIcon(getClass().getResource("/image/logout.png"));
