@@ -226,6 +226,7 @@ May 29, 2025 11:48:43 AM loging.loging$ActivityLogger logLogin
 INFO: Muhammad Muqtasid Roziq berhasil melakukan login.
 May 29, 2025 11:51:45 AM loging.loging$ActivityLogger logLogin
 INFO: Ahmad Kasir berhasil melakukan login.
+<<<<<<< HEAD
 May 29, 2025 1:10:57 PM loging.loging$ActivityLogger logError
 SEVERE: Error: Kesalahan login pada user username: Cannot invoke "java.sql.Connection.prepareStatement(String)" because "conn" is null
 May 29, 2025 1:11:35 PM loging.loging$ActivityLogger logError
@@ -444,3 +445,123 @@ May 31, 2025 9:21:15 PM loging.loging$ActivityLogger logLogin
 INFO: q berhasil melakukan login.
 Jun 01, 2025 2:21:21 AM loging.loging$ActivityLogger logLogin
 INFO: kasir berhasil melakukan login.
+=======
+May 29, 2025 4:14:53 PM loging.loging$ActivityLogger logError
+SEVERE: Error: Kesalahan login pada user a: Unknown column 'username_user' in 'where clause'
+May 29, 2025 4:15:11 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 29, 2025 4:21:23 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 29, 2025 4:21:56 PM loging.loging$ActivityLogger logError
+SEVERE: Error: agagal mengubah data null
+May 29, 2025 4:29:37 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 29, 2025 4:29:49 PM loging.loging$ActivityLogger logError
+SEVERE: Error: agagal mengubah data null
+May 29, 2025 4:36:37 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 29, 2025 4:37:21 PM loging.loging$ActivityLogger logError
+SEVERE: Error: agagal mengubah data null
+May 29, 2025 4:39:04 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 29, 2025 4:39:14 PM loging.loging$ActivityLogger logEditUser
+INFO: a telah mengedit data: null
+May 29, 2025 4:42:29 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 29, 2025 4:52:11 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 29, 2025 4:56:40 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 29, 2025 4:57:02 PM loging.loging$ActivityLogger logEditProduk
+INFO: a telah mengedit data di dalam produk: null
+May 30, 2025 5:21:19 PM loging.loging$ActivityLogger logError
+SEVERE: Error: gagal melaakukan login karena salah memasukan username/password.
+May 30, 2025 5:21:23 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 5:22:17 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 5:25:56 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 5:30:31 PM loging.loging$ActivityLogger logError
+SEVERE: Error: gagal melaakukan login karena salah memasukan username/password.
+May 30, 2025 5:30:34 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 5:34:14 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 5:37:17 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 5:38:01 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 6:13:27 PM loging.loging$ActivityLogger logError
+SEVERE: Error: gagal melaakukan login karena salah memasukan username/password.
+May 30, 2025 6:13:30 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 6:19:52 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 6:30:30 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 6:35:54 PM loging.loging$ActivityLogger logError
+SEVERE: Error: gagal melaakukan login karena salah memasukan username/password.
+May 30, 2025 6:35:56 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 6:37:01 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 7:18:26 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 7:19:53 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 7:20:55 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 7:24:00 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 7:33:44 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 9:50:46 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 9:56:13 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 10:03:43 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 10:04:44 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 10:05:37 PM loging.loging$ActivityLogger logError
+SEVERE: Error: gagal melaakukan login karena salah memasukan username/password.
+May 30, 2025 10:05:40 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 10:12:00 PM loging.loging$ActivityLogger logLogin
+INFO: a berhasil melakukan login.
+May 30, 2025 10:17:42 PM loging.loging$ActivityLogger logLogin
+INFO: utiya berhasil melakukan login.
+May 31, 2025 8:53:32 AM loging.loging$ActivityLogger logError
+SEVERE: Error: gagal melaakukan login karena salah memasukan username/password.
+May 31, 2025 8:53:40 AM loging.loging$ActivityLogger logLogin
+INFO: utiya berhasil melakukan login.
+May 31, 2025 9:53:52 AM loging.loging$ActivityLogger logError
+SEVERE: Error: gagal melaakukan login karena salah memasukan username/password.
+May 31, 2025 9:53:57 AM loging.loging$ActivityLogger logLogin
+INFO: utiya berhasil melakukan login.
+May 31, 2025 10:06:42 AM loging.loging$ActivityLogger logLogin
+INFO: utiya berhasil melakukan login.
+May 31, 2025 3:59:24 PM loging.loging$ActivityLogger logError
+SEVERE: Error: Kesalahan login pada user utiya: Uncompilable code - constructor formUtama in class formAdmin.formUtama cannot be applied to given types;
+  required: java.lang.String
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+May 31, 2025 3:59:37 PM loging.loging$ActivityLogger logError
+SEVERE: Error: Kesalahan login pada user roziq: Uncompilable code - constructor formUtama in class formAdmin.formUtama cannot be applied to given types;
+  required: java.lang.String
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+May 31, 2025 3:59:45 PM loging.loging$ActivityLogger logError
+SEVERE: Error: Kesalahan login pada user roziq: Uncompilable code - constructor formUtama in class formAdmin.formUtama cannot be applied to given types;
+  required: java.lang.String
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+May 31, 2025 3:59:48 PM loging.loging$ActivityLogger logError
+SEVERE: Error: Kesalahan login pada user roziq: Uncompilable code - constructor formUtama in class formAdmin.formUtama cannot be applied to given types;
+  required: java.lang.String
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+May 31, 2025 4:00:25 PM loging.loging$ActivityLogger logLogin
+INFO: utiya berhasil melakukan login.
+>>>>>>> 3657f06d6cccc3380163847faa05e890966a32b6

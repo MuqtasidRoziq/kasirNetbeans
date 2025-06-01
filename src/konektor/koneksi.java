@@ -9,8 +9,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class koneksi {
+<<<<<<< HEAD
 
     private static final String URL = "jdbc:mysql://localhost:3306/db_crepes1"; // Ganti dengan URL database Anda
+=======
+    
+    private static final String URL = "jdbc:mysql://localhost:3306/db_crepes"; // Ganti dengan URL database Anda
+>>>>>>> 3657f06d6cccc3380163847faa05e890966a32b6
     private static final String USERNAME = "root"; // Ganti dengan username database Anda
     private static final String PASSWORD = ""; // Ganti dengan password database Anda
 

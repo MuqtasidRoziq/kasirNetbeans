@@ -9,25 +9,23 @@ import formOwner.formPenjualan;
 public class formUtama extends javax.swing.JFrame {
 
     private String userId;
-    private String nama;
-    private String email;
     private String role;
     private String userName;
     private String Password;
 
-    public formUtama() {
+    public formUtama(String username) {
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         execute();
+        this.userName = username;
+        lblUsername.setText(username);
     }
 //  set nama user yang login start //    
-    public void setUser(String userId, String nama, String email, String role, String userName, String Password) {
+    public void setUser(String userId, String userName, String Password, String role) {
         this.userId = userId;
-        this.nama = nama;
-        this.email = email;
-        this.role = role;
         this.userName = userName;
         this.Password = Password;
+        this.role = role;
     }
     private void execute() {
         ImageIcon iconHome = new ImageIcon(getClass().getResource("/image/home.png"));
@@ -58,9 +56,19 @@ public class formUtama extends javax.swing.JFrame {
             isiContent.repaint();
             isiContent.revalidate();
         });
-        formMenuList menuDataProduk = new formMenuList(iconDataProduk, false, null, "Data Produk", (ActionEvent e) -> {
+        formMenuList menuDataRasa = new formMenuList(iconDataProduk, false, null, "Data Rasa", (ActionEvent e) -> {
             isiContent.removeAll();
+<<<<<<< HEAD
             isiContent.add(new formDataProduk(nama));
+=======
+            isiContent.add(new formDataRasa());
+            isiContent.repaint();
+            isiContent.revalidate();
+        });
+        formMenuList menuDatavarian = new formMenuList(iconDataProduk, false, null, "Data varian", (ActionEvent e) -> {
+            isiContent.removeAll();
+            isiContent.add(new formDataVariant());
+>>>>>>> 3657f06d6cccc3380163847faa05e890966a32b6
             isiContent.repaint();
             isiContent.revalidate();
         });
@@ -80,7 +88,8 @@ public class formUtama extends javax.swing.JFrame {
         listMenuItem.add(menuHome);
         listMenuItem.add(menuProfile);
         listMenuItem.add(menuDataUser);
-        listMenuItem.add(menuDataProduk);
+        listMenuItem.add(menuDataRasa);
+        listMenuItem.add(menuDatavarian);
         listMenuItem.add(menuTransaksi);
         listMenuItem.add(menuLogout);
         
@@ -97,7 +106,7 @@ public class formUtama extends javax.swing.JFrame {
         header = new javax.swing.JPanel();
         header1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblUsername = new javax.swing.JLabel();
         listMenu = new javax.swing.JPanel();
         listMenuItem = new javax.swing.JPanel();
         content = new javax.swing.JPanel();
@@ -119,8 +128,8 @@ public class formUtama extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/market-icons-15733-removebg-preview.png"))); // NOI18N
         jLabel1.setText("Toko Kami");
 
-        jLabel2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
-        jLabel2.setText("Nama User");
+        lblUsername.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
+        lblUsername.setText("Nama User");
 
         javax.swing.GroupLayout header1Layout = new javax.swing.GroupLayout(header1);
         header1.setLayout(header1Layout);
@@ -129,7 +138,7 @@ public class formUtama extends javax.swing.JFrame {
             .addGroup(header1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 588, Short.MAX_VALUE)
-                .addComponent(jLabel2)
+                .addComponent(lblUsername)
                 .addContainerGap())
         );
         header1Layout.setVerticalGroup(
@@ -139,7 +148,7 @@ public class formUtama extends javax.swing.JFrame {
                 .addGroup(header1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, header1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(lblUsername)
                         .addContainerGap())))
         );
 
@@ -245,7 +254,7 @@ public class formUtama extends javax.swing.JFrame {
     private javax.swing.JPanel header1;
     private javax.swing.JPanel isiContent;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel lblUsername;
     private javax.swing.JPanel listMenu;
     private javax.swing.JPanel listMenuItem;
     // End of variables declaration//GEN-END:variables
